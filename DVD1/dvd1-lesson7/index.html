@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Today - Lesson 07</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* =================== CSS STYLES =================== */
+        :root { 
+            --dark-blue: #4A148C; 
+            --light-blue: #7E57C2; 
+            --bg-color: #F3E5F5; 
+            --border-color: #D1C4E9; 
+            --green-text: #27ae60; 
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+
+        .main-card { background-color: #ffffff; width: 100%; max-width: 650px; border-radius: 20px; box-shadow: 0 10px 30px rgba(74, 20, 140, 0.1); padding: 30px; position: relative; overflow: hidden; min-height: 500px; display: flex; flex-direction: column; }
+
+        /* العلامة المائية: شفافية 14% */
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; opacity: 0.14; z-index: 0; pointer-events: none; }
+
+        .content-wrapper { position: relative; z-index: 1; flex-grow: 1; display: flex; flex-direction: column; }
+
+        .app-screen { display: none; width: 100%; }
+        .app-screen.active { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* اللوجو: يملأ الدايرة بالكامل */
+        .portal-logo-container { width: 100px; height: 100px; background-color: white; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; overflow: hidden; margin: 0 auto 15px auto; z-index: 2; border: 3px solid var(--light-blue); }
+        .portal-logo-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        .section-title { color: var(--dark-blue); font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 5px; }
+        .lesson-title { color: var(--dark-blue); font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 25px; line-height: 1.4; }
+        .hint { text-align: center; color: #555; font-size: 14px; margin-bottom: 15px; font-weight: bold;}
+
+        .btn-back { background: none; border: none; color: var(--light-blue); font-weight: bold; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; gap: 5px; font-size: 16px; }
+        .btn-action { background-color: var(--light-blue); color: white; border: none; padding: 15px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; margin-bottom: 10px; transition: 0.3s; font-family: 'Poppins', sans-serif;}
+        .btn-action:hover { background-color: var(--dark-blue); }
+
+        .menu-list { display: flex; flex-direction: column; gap: 12px; }
+
+        /* تعديلات أزرار المنيو الملونة */
+        .menu-item { background: white; border-radius: 12px; padding: 15px 20px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.3s; text-align: left; border: 2px solid transparent; }
+        .menu-item:hover { background-color: #f8f9fa; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .menu-item span { font-weight: bold; font-size: 16px; }
+
+        /* ألوان كل زرار في المنيو بالترتيب */
+        .menu-item:nth-child(1) { border-color: #8e44ad; } .menu-item:nth-child(1) span { color: #8e44ad; }
+        .menu-item:nth-child(2) { border-color: #2c3e50; } .menu-item:nth-child(2) span { color: #2c3e50; }
+        .menu-item:nth-child(3) { border-color: #8e44ad; } .menu-item:nth-child(3) span { color: #8e44ad; }
+        .menu-item:nth-child(4) { border-color: #2c3e50; } .menu-item:nth-child(4) span { color: #2c3e50; }
+        .menu-item:nth-child(5) { border-color: #e74c3c; } .menu-item:nth-child(5) span { color: #e74c3c; }
+        .menu-item:nth-child(6) { border-color: #d35400; } .menu-item:nth-child(6) span { color: #d35400; }
+        .menu-item:nth-child(7) { border-color: #f39c12; } .menu-item:nth-child(7) span { color: #f39c12; }
+        .menu-item:nth-child(8) { border-color: #27ae60; } .menu-item:nth-child(8) span { color: #27ae60; }
+        .menu-item:nth-child(9) { border-color: #16a085; } .menu-item:nth-child(9) span { color: #16a085; }
+        .menu-item:nth-child(10) { border-color: #2980b9; } .menu-item:nth-child(10) span { color: #2980b9; }
+        .menu-item:nth-child(11) { border-color: #c0392b; } .menu-item:nth-child(11) span { color: #c0392b; }
+
+        .flashcard-box { width: 100%; height: 300px; perspective: 1000px; margin: 20px 0; cursor: pointer; }
+        .card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flashcard-box.flipped .card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; border-radius: 15px; border: 1px solid var(--border-color); background: white; top: 0; left: 0; }
+        .card-back { transform: rotateY(180deg); background-color: var(--bg-color); border: 2px solid var(--light-blue); }
+
+        .fc-img { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .fc-word { font-size: 26px; font-weight: bold; color: var(--dark-blue); }
+        .fc-meaning { font-size: 22px; color: var(--light-blue); font-weight: bold; margin-bottom: 10px; }
+        .fc-example { font-size: 14px; color: #333; line-height: 1.5; }
+        .fc-example strong { color: var(--dark-blue); }
+
+        .nav-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .btn-nav { background: white; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; color: var(--dark-blue); font-family: 'Poppins', sans-serif;}
+        .btn-nav:hover { background: var(--bg-color); }
+        .counter-text { font-size: 18px; font-weight: bold; color: var(--dark-blue); }
+
+        .quiz-btn { background: white; border: 1px solid var(--light-blue); padding: 15px; border-radius: 12px; margin-bottom: 12px; width: 100%; cursor: pointer; font-weight: bold; font-size: 16px; color: #333; transition: 0.3s; font-family: 'Poppins', sans-serif; text-align: center;}
+        .quiz-btn:hover { background: var(--light-blue); color: white; border: 1px solid var(--light-blue); }
+        .quiz-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+        .result-box { display: none; text-align: center; padding: 30px; background: var(--bg-color); border: 3px solid var(--light-blue); border-radius: 15px; margin-top: 20px; }
+        .fraction-score { font-size: 22px; font-weight: bold; color: #555; margin-top: 10px; }
+
+        .dialogue-box { background: #f8f9fa; border: 1px solid var(--border-color); border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 15px; min-height: 140px; display: flex; flex-direction: column; justify-content: center; }
+        .char-name { font-weight: bold; color: var(--light-blue); font-size: 18px; margin-bottom: 10px; text-transform: capitalize; }
+        .dial-text { font-size: 20px; font-weight: bold; color: #333; line-height: 1.4; }
+
+        .roleplay-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 30px; }
+        .role-btn { width: 45%; border: 1px solid var(--border-color); border-radius: 15px; padding: 20px 10px; text-align: center; cursor: pointer; background: white; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .role-btn:hover { border-color: var(--light-blue); background: var(--bg-color); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .role-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid var(--border-color); background-color: var(--bg-color); }
+        .role-name { font-weight: bold; font-size: 16px; color: var(--dark-blue); text-transform: capitalize;}
+
+        .turn-indicator { padding: 12px; border-radius: 10px; font-weight: bold; margin: 15px 0; text-align: center; font-size: 16px; }
+        .your-turn { background: #4caf50; color: white; }
+        .app-turn { background: var(--light-blue); color: white; }
+
+        .playback-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; max-height: 350px; overflow-y: auto; }
+        .playback-item { background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; text-align: left; }
+
+        .lw-input { width: 100%; padding: 15px; font-size: 18px; text-align: center; border: 2px solid var(--border-color); border-radius: 10px; margin-bottom: 15px; font-family: 'Poppins', sans-serif; font-weight: bold; color: var(--dark-blue); }
+        .lw-input:focus { outline: none; border-color: var(--light-blue); }
+
+        /* الفوتر بخط أتقل ولون أسود */
+        .app-footer { text-align: right; margin-top: auto; padding-top: 25px; font-size: 13px; font-weight: 900; color: black; }
+    </style>
+</head>
+<body>
+    <div class="main-card">
+        
+        <img src="images/icons/logo.png" class="watermark" alt="Watermark" onerror="this.style.display='none'">
+
+        <div class="content-wrapper">
+            
+            <div id="screen-menu" class="app-screen active">
+                <button style="background: #f8f9fa; border: 2px solid #e74c3c; color: #e74c3c; font-weight: bold; font-size: 16px; cursor: pointer; padding: 10px; border-radius: 10px; width: 95%; margin: 0 auto 15px auto; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.location.href='../../index.html?dvd=1'">🔙 Back to DVD 1 Lessons</button>
+
+                <div class="portal-logo-container" style="width: 70px; height: 70px;">
+                    <img src="images/icons/logo.png" alt="Logo" onerror="this.style.display='none'">
+                </div>
+                <h1 class="section-title">English Today</h1>
+                <p id="welcomeMsg" style="text-align:center; color:#e53935; font-weight:bold; margin-bottom:5px; font-size: 18px;">Welcome! 👋</p>
+                <p class="lesson-title" id="ui-lesson-title-menu"></p>
+                <div class="menu-list">
+                    <button class="menu-item" onclick="showScreen('screen-video1')"><span>🎬 1. Watch Conversation 1</span></button>
+                    <button class="menu-item" onclick="showScreen('screen-grammar-video1')"><span>📺 2. Watch Grammar 1</span></button>
+                    <button class="menu-item" onclick="showScreen('screen-video2')"><span>🎬 3. Watch Conversation 2</span></button>
+                    <button class="menu-item" onclick="showScreen('screen-grammar-video2')"><span>📺 4. Watch Grammar 2</span></button>
+                    <button class="menu-item" onclick="startStoryQuiz()"><span>💬 5. Story Quiz</span></button>
+                    <button class="menu-item" onclick="showScreen('screen-flashcards')"><span>🃏 6. Difficult Words</span></button>
+                    <button class="menu-item" onclick="startWordsQuiz()"><span>🎯 7. Words Quiz</span></button>
+                    <button class="menu-item" onclick="startLearnLinesMenu()"><span>🗣️ 8. Learn The Lines</span></button>
+                    <button class="menu-item" onclick="startLwcMenu()"><span>📝 9. Listen & Write (Story)</span></button>
+                    <button class="menu-item" onclick="startRoleplayMenu()"><span>🎭 10. Roleplay Mode</span></button>
+                    <button class="menu-item" onclick="startGrammarQuiz()"><span>✅ 11. Grammar Quiz</span></button>
+                </div>
+            </div>
+
+            <div id="screen-video1" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Conversation 1</h1>
+                <div style="border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; margin-bottom: 15px; background: white; aspect-ratio: 16/9;">
+                    <iframe src="https://rumble.com/embed/v7751yg/?pub=4patlm" style="width:100%; height: 100%; display:block; border: none;" allow="autoplay; fullscreen" frameborder="0"></iframe>
+                </div>
+                <button class="btn-action" onclick="showScreen('screen-grammar-video1')">Next: Grammar 1 📺</button>
+            </div>
+
+            <div id="screen-grammar-video1" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Grammar 1</h1>
+                <div style="border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; margin-bottom: 15px; background: white; aspect-ratio: 16/9;">
+                    <iframe src="https://rumble.com/embed/v775270/?pub=4patlm" style="width:100%; height: 100%; display:block; border: none;" allow="autoplay; fullscreen" frameborder="0"></iframe>
+                </div>
+                <button class="btn-action" onclick="showScreen('screen-video2')">Next: Conversation 2 🎬</button>
+            </div>
+
+            <div id="screen-video2" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Conversation 2</h1>
+                <div style="border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; margin-bottom: 15px; background: white; aspect-ratio: 16/9;">
+                    <iframe src="https://rumble.com/embed/v77521u/?pub=4patlm" style="width:100%; height: 100%; display:block; border: none;" allow="autoplay; fullscreen" frameborder="0"></iframe>
+                </div>
+                <button class="btn-action" onclick="showScreen('screen-grammar-video2')">Next: Grammar 2 📺</button>
+            </div>
+
+            <div id="screen-grammar-video2" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Grammar 2</h1>
+                <div style="border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; margin-bottom: 15px; background: white; aspect-ratio: 16/9;">
+                    <iframe src="https://rumble.com/embed/v7752ao/?pub=4patlm" style="width:100%; height: 100%; display:block; border: none;" allow="autoplay; fullscreen" frameborder="0"></iframe>
+                </div>
+                <button class="btn-action" onclick="startStoryQuiz()">Next: Story Quiz 💬</button>
+            </div>
+
+            <div id="screen-story-quiz" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Story Quiz</h1>
+                <div id="story-quiz-area">
+                    <div class="dialogue-box"><p id="sqQuestionText" style="font-size: 20px; font-weight: bold; color: var(--dark-blue);"></p></div>
+                    <div id="sq-options" style="margin-top: 15px;"></div>
+                    <p id="sqProgress" style="text-align: center; margin-top: 15px; font-weight: bold; color: #555;"></p>
+                    <button id="sqNextBtn" class="btn-action" style="display:none; background:#4caf50; margin-top: 15px;" onclick="nextSqQuestion()">Next Question ➡️</button>
+                </div>
+                <div id="sq-result-area" class="result-box">
+                    <h2>Quiz Finished!</h2>
+                    <h3 id="sqFeedbackMsg" style="margin-top: 10px; font-size: 24px;"></h3>
+                    <p id="sqScoreFraction" class="fraction-score"></p>
+                    <p id="sqFinalScore" style="font-size: 45px; font-weight: bold; margin: 5px 0 20px 0; color: var(--dark-blue);">0%</p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+            </div>
+
+            <div id="screen-flashcards" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Difficult Words</h1>
+                <div class="flashcard-box" id="fcBox" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img id="fcImg" class="fc-img" src="" alt="Word Image" onerror="this.src='images/icons/logo.png';">
+                            <p class="fc-word" id="fcWordMain"></p>
+                        </div>
+                        <div class="card-back">
+                            <p class="fc-meaning" id="fcWordSub"></p>
+                            <div class="fc-example" id="fcWordEx"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="hint">👆 Click the card to flip</p>
+                <button class="btn-action" onclick="event.stopPropagation(); playWordAudio()">🔊 Listen</button>
+                <audio id="wordAudio"></audio>
+                <div class="nav-controls">
+                    <button class="btn-nav" onclick="prevCard()">Prev</button>
+                    <span class="counter-text" id="fcCounter"></span>
+                    <button class="btn-nav" onclick="nextCard()">Next</button>
+                </div>
+            </div>
+
+            <div id="screen-words-quiz" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Words Quiz</h1>
+                <div id="wq-question-area">
+                    <p class="hint">Listen carefully then choose</p>
+                    <button class="btn-action" onclick="playWqAudio()">🔊 Listen to word</button>
+                    <div id="wq-options" style="margin-top: 15px;"></div>
+                    <p id="wqProgress" style="text-align: center; margin-top: 15px; font-weight: bold; color: #555;"></p>
+                    <button id="wqNextBtn" class="btn-action" style="display:none; background:#4caf50; margin-top: 15px;" onclick="nextWqQuestion()">Next Question ➡️</button>
+                </div>
+                <div id="wq-result-area" class="result-box">
+                    <h2>Quiz Finished!</h2>
+                    <h3 id="wqFeedbackMsg" style="margin-top: 10px; font-size: 24px;"></h3>
+                    <p id="wqScoreFraction" class="fraction-score"></p>
+                    <p id="wqFinalScore" style="font-size: 45px; font-weight: bold; margin: 5px 0 20px 0; color: var(--dark-blue);">0%</p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+                <audio id="wqAudio"></audio>
+            </div>
+
+            <div id="screen-learn-lines-menu" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Learn The Lines</h1>
+                <p class="hint">Choose a conversation</p>
+                <div class="menu-list">
+                    <button class="btn-action" onclick="startLearnLines(1)">Conversation 1</button>
+                    <button class="btn-action" style="background-color: var(--dark-blue);" onclick="startLearnLines(2)">Conversation 2</button>
+                </div>
+            </div>
+            
+            <div id="screen-learn-lines" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-learn-lines-menu')">↩ Back</button>
+                <h1 class="section-title">Learn The Lines</h1>
+                <p class="hint">Listen and repeat</p>
+                <div class="dialogue-box">
+                    <p class="char-name" id="learnChar"></p>
+                    <p class="dial-text" id="learnText"></p>
+                </div>
+                <button class="btn-action" onclick="playLearnAudio()">🔊 Listen</button>
+                <audio id="learnAudio"></audio>
+                <div class="nav-controls">
+                    <button class="btn-nav" onclick="prevLearn()">Prev</button>
+                    <span class="counter-text" id="learnCounter"></span>
+                    <button class="btn-nav" onclick="nextLearn()">Next</button>
+                </div>
+            </div>
+
+            <div id="screen-lwc-menu" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Listen & Write</h1>
+                <p class="hint">Choose a conversation</p>
+                <div class="menu-list">
+                    <button class="btn-action" onclick="startLwc(1)">Conversation 1</button>
+                    <button class="btn-action" style="background-color: var(--dark-blue);" onclick="startLwc(2)">Conversation 2</button>
+                </div>
+            </div>
+            
+            <div id="screen-listen-write-conv" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-lwc-menu')">↩ Back</button>
+                <h1 class="section-title">Listen & Write</h1>
+                <div class="dialogue-box" id="lwc-content-area">
+                    <p class="hint">Listen and type the sentence</p>
+                    <button class="btn-action" onclick="playLwcAudio()">🔊 Listen to line</button>
+                    <audio id="lwcAudio"></audio>
+                    <input type="text" id="lwcInput" class="lw-input" placeholder="Type here...">
+                    <button class="btn-action" id="lwcCheckBtn" onclick="checkLwcAnswer()">✅ Check Answer</button>
+                    <p id="lwcFeedback" style="font-size: 18px; font-weight: bold; margin-top: 10px; display: none;"></p>
+                    <button class="btn-action" id="lwcNextBtn" onclick="nextLwcLine()" style="display:none; background:#4caf50; margin-top:15px;">Next Line</button>
+                </div>
+                <p id="lwcProgress" class="counter-text" style="text-align: center; margin-top: 15px;"></p>
+                <div id="lwc-result-area" class="result-box">
+                    <h2>Practice Finished!</h2>
+                    <h3 id="lwcFeedbackMsg" style="margin-top: 10px; font-size: 24px;"></h3>
+                    <p id="lwcScoreFraction" class="fraction-score"></p>
+                    <p id="lwcFinalScore" style="font-size: 45px; font-weight: bold; margin: 15px 0 20px 0; color: var(--dark-blue);">0%</p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+            </div>
+
+            <div id="screen-roleplay-menu" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Roleplay Mode</h1>
+                <p class="hint">Choose a conversation</p>
+                <div class="menu-list">
+                    <button class="btn-action" onclick="startRoleplaySelect(1)">Conversation 1</button>
+                    <button class="btn-action" style="background-color: var(--dark-blue);" onclick="startRoleplaySelect(2)">Conversation 2</button>
+                </div>
+            </div>
+            
+            <div id="screen-roleplay-select" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-roleplay-menu')">↩ Back</button>
+                <h1 class="section-title">Roleplay Mode</h1>
+                <p class="hint" style="margin-bottom: 0;">Choose your role</p>
+                <div class="roleplay-container" id="roleplay-buttons-area"></div>
+            </div>
+            
+            <div id="screen-roleplay-active" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-roleplay-select')">↩ Back to Roles</button>
+                <h1 class="section-title">Roleplay</h1>
+                <div id="rp-content-area">
+                    <div class="dialogue-box">
+                        <p class="char-name" id="rpChar"></p>
+                        <p class="dial-text" id="rpText"></p>
+                    </div>
+                    <div id="rpIndicator" class="turn-indicator"></div>
+                    <div id="micArea" style="display:none; text-align:center;">
+                        <button id="btnRecord" class="btn-action" style="background:#4caf50;" onclick="toggleRecording()">🎙️ Record</button>
+                        <audio id="userAudioPlayback" controls style="margin-top: 10px; width: 100%; display: none;"></audio>
+                    </div>
+                    <button class="btn-action" style="margin-top:20px;" onclick="nextRp()">Next Step</button>
+                    <audio id="rpAudio"></audio>
+                </div>
+                <div id="rp-result-area" class="result-box">
+                    <h2>Roleplay Completed!</h2>
+                    <button class="btn-action" style="margin-top:20px; background:#4caf50;" onclick="startRoleplayPlayback()">Listen to conversation 🎙️</button>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+            </div>
+            
+            <div id="screen-roleplay-playback" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-roleplay-active')">↩ Back to Roleplay</button>
+                <h1 class="section-title">Your Conversation</h1>
+                <button class="btn-action" id="btnPlayAllDialogue">▶️ Play Entire Dialogue</button>
+                <div id="playbackList" class="playback-list"></div>
+                <audio id="seqAudioPlayer"></audio>
+            </div>
+
+            <div id="screen-grammar-quiz" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Grammar Quiz</h1>
+                <div id="gq-question-area">
+                    <div class="dialogue-box"><p id="gqQuestionText" style="font-size: 20px; font-weight: bold; color: var(--dark-blue);"></p></div>
+                    <div id="gq-options" style="margin-top: 15px;"></div>
+                    <p id="gqProgress" style="text-align: center; margin-top: 15px; font-weight: bold; color: #555;"></p>
+                    <button id="gqNextBtn" class="btn-action" style="display:none; background:#4caf50; margin-top: 15px;" onclick="nextGqQuestion()">Next Question ➡️</button>
+                </div>
+                <div id="gq-result-area" class="result-box">
+                    <h2>Quiz Finished!</h2>
+                    <h3 id="gqFeedbackMsg" style="margin-top: 10px; font-size: 24px;"></h3>
+                    <p id="gqScoreFraction" class="fraction-score"></p>
+                    <p id="gqFinalScore" style="font-size: 45px; font-weight: bold; margin: 5px 0 20px 0; color: var(--dark-blue);">0%</p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                    <button class="btn-action" style="background-color: #e74c3c; margin-top: 10px;" onclick="window.location.href='../../index.html?dvd=1'">🔙 Back to DVD 1 Lessons</button>
+                </div>
+            </div>
+
+            <audio id="correctAudio" src="audio/effects/correct.mp3"></audio>
+            <audio id="wrongAudio" src="audio/effects/wrong.mp3"></audio>
+            
+            <div class="app-footer">Created by : Hisham Embaby</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNF8mnf0ucVbAbuZojokGSKNnUvQNvoGk",
+            authDomain: "hisham-s-english-academy.firebaseapp.com",
+            projectId: "hisham-s-english-academy",
+            storageBucket: "hisham-s-english-academy.firebasestorage.app",
+            messagingSenderId: "766824698161",
+            appId: "1:766824698161:web:aeb8d7ab371912e7aee010"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUid = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUid = user.uid;
+                window.currentStudentName = user.displayName || "Student";
+                const welcomeMsg = document.getElementById('welcomeMsg');
+                if(welcomeMsg) welcomeMsg.innerText = `Welcome, ${window.currentStudentName}! 👋`;
+            } else {
+                console.log("Local testing active. Redirect bypassed.");
+                window.currentStudentName = "Student";
+            }
+        });
+
+        window.markLessonCompleted = async function() {
+            if (!currentUid) return;
+            try {
+                const studentRef = doc(db, "students", currentUid);
+                // بنسجل إن الطالب ده خلص (dvd1-lesson7)
+                await updateDoc(studentRef, {
+                    completedLessons: arrayUnion("dvd1-lesson7") 
+                });
+                console.log("تم إرسال إشارة النجاح للبوابة بنجاح! ✅");
+            } catch (e) { console.error("Error saving progress:", e); }
+        };
+    </script>
+
+    <script>
+        const LESSON_TITLE = "Lesson 07: TV Programs & Cinema"; 
+        document.getElementById('ui-lesson-title-menu').innerText = LESSON_TITLE;
+
+        // --- 1. الكلمات الصعبة ---
+        const wordsData = [
+            { main: "Presenters", sub: "مقدمو البرامج", img: "images/words/word-1.jpg", audio: "audio/words/word-1.mp3", def: "People who introduce a TV or radio program.", ex: "Eric and Lucy are the presenters of the show." },
+            { main: "Nervous", sub: "متوتر / قلق", img: "images/words/word-2.jpg", audio: "audio/words/word-2.mp3", def: "Feeling worried or anxious about something.", ex: "Lucy was nervous because it was her first time on TV." },
+            { main: "Fascinating", sub: "خلاب / رائع جداً", img: "images/words/word-3.jpg", audio: "audio/words/word-3.mp3", def: "Extremely interesting.", ex: "India is a fascinating country with a rich culture." },
+            { main: "Expert", sub: "خبير", img: "images/words/word-4.jpg", audio: "audio/words/word-4.mp3", def: "A person with special knowledge or skill.", ex: "Sanjeev is the cinema expert on the program." },
+            { main: "Adore", sub: "يعشق / يحب بشدة", img: "images/words/word-5.jpg", audio: "audio/words/word-5.mp3", def: "To love and respect someone or something deeply.", ex: "Christine adores travelling around the world." },
+            { main: "Especially", sub: "خصوصاً / بشكل خاص", img: "images/words/word-6.jpg", audio: "audio/words/word-6.mp3", def: "To a great extent; very much; particularly.", ex: "John loves sports, especially rugby and football." },
+            { main: "Charming", sub: "جذاب / ساحر", img: "images/words/word-7.jpg", audio: "audio/words/word-7.mp3", def: "Very pleasant or attractive.", ex: "Susan is a charming lady who loves talking about the weather." },
+            { main: "Compliment", sub: "مجاملة / إطراء", img: "images/words/word-8.jpg", audio: "audio/words/word-8.mp3", def: "A polite expression of praise or admiration.", ex: "Susan thanked Eric for the nice compliment." },
+            { main: "Commentators", sub: "معلقون", img: "images/words/word-9.jpg", audio: "audio/words/word-9.mp3", def: "People who broadcast a description or opinion of an event.", ex: "Marie and Tom are the commentators for the discussions." },
+            { main: "Journalist", sub: "صحفي", img: "images/words/word-10.jpg", audio: "audio/words/word-10.mp3", def: "A person who writes for news media.", ex: "Tom works as a journalist in Manchester." },
+            { main: "Discuss", sub: "يناقش", img: "images/words/word-11.jpg", audio: "audio/words/word-11.mp3", def: "To talk about a subject to exchange ideas.", ex: "They will discuss many different things on the show." },
+            { main: "Viewers", sub: "مشاهدين", img: "images/words/word-12.jpg", audio: "audio/words/word-12.mp3", def: "People who watch a television program.", ex: "Sanjeev said good morning to all the viewers." },
+            { main: "Fan", sub: "معجب / مشجع", img: "images/words/word-13.jpg", audio: "audio/words/word-13.mp3", def: "A person who has a strong interest in a person or thing.", ex: "Lucy is a big fan of George Clooney." },
+            { main: "Good-looking / Handsome", sub: "وسيم / حسن المظهر", img: "images/words/word-14.jpg", audio: "audio/words/word-14.mp3", def: "Having an attractive appearance.", ex: "Many people think George Clooney is very handsome." },
+            { main: "Film director", sub: "مخرج سينمائي", img: "images/words/word-15.jpg", audio: "audio/words/word-15.mp3", def: "A person who controls the making of a movie.", ex: "George Clooney is an actor and a film director." },
+            { main: "Screenwriter", sub: "كاتب سيناريو", img: "images/words/word-16.jpg", audio: "audio/words/word-16.mp3", def: "A person who writes a script for a movie.", ex: "A good screenwriter knows how to tell a great story." },
+            { main: "Politics", sub: "السياسة", img: "images/words/word-17.jpg", audio: "audio/words/word-17.mp3", def: "Activities associated with the governance of a country.", ex: "His main interest outside of cinema is politics." },
+            { main: "Democrat", sub: "ديمقراطي", img: "images/words/word-18.jpg", audio: "audio/words/word-18.mp3", def: "A supporter of democracy.", ex: "He is a democrat who believes in equality." },
+            { main: "Liberal ideas", sub: "أفكار ليبرالية", img: "images/words/word-19.jpg", audio: "audio/words/word-19.mp3", def: "Beliefs that support progressive changes and diversity.", ex: "He is known for having liberal ideas." },
+            { main: "Hobbies", sub: "هوايات", img: "images/words/word-20.jpg", audio: "audio/words/word-20.mp3", def: "Activities done regularly for pleasure.", ex: "His hobbies include playing basketball." },
+            { main: "Divorced", sub: "مُطلّق", img: "images/words/word-21.jpg", audio: "audio/words/word-21.mp3", def: "Legally separated from a husband or wife.", ex: "He is not married anymore; he is divorced." },
+            { main: "Single", sub: "أعزب / غير متزوج", img: "images/words/word-22.jpg", audio: "audio/words/word-22.mp3", def: "Not married, or not having a romantic partner.", ex: "Because he is divorced, he is now single." }
+        ];
+
+        // --- 2. المحادثة الأولى ---
+        const conv1Data = [
+            { char: "eric", text: "Good evening everyone. Welcome to our TV programs. I'm Eric Brown.", audio: "audio/conv-1/01-eric.mp3", img: "images/avatars/eric.jpg" },
+            { char: "lucy", text: "And I'm Lucy Ross.", audio: "audio/conv-1/02-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "eric", text: "Well, Lucy and I are the presenters of all the programs. Are you nervous, Lucy?", audio: "audio/conv-1/03-eric.mp3", img: "images/avatars/eric.jpg" },
+            { char: "lucy", text: "Yes, I am. This is my first time on TV.", audio: "audio/conv-1/04-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "eric", text: "Come on, come on. You're a great presenter. Well, let's meet our experts now. What's your name?", audio: "audio/conv-1/05-eric.mp3", img: "images/avatars/eric.jpg" },
+            { char: "sanjeev", text: "Sanjeev Gupta.", audio: "audio/conv-1/06-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "Well, hello Sanjeev. Where are you from?", audio: "audio/conv-1/07-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "I'm from New Delhi.", audio: "audio/conv-1/08-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "eric", text: "Oh, you're Indian. India's a fascinating country. And what are your interests?", audio: "audio/conv-1/09-eric.mp3", img: "images/avatars/eric.jpg" },
+            { char: "sanjeev", text: "I like the cinema. Everything to do with the cinema. I watch lots of films.", audio: "audio/conv-1/10-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "Interesting. Sanjeev's our cinema expert. And you? What's your name?", audio: "audio/conv-1/11-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "christine", text: "Hello, I'm Christine Oteng. I'm from Ghana, in Africa. But now I live in London. I like London. I love travelling. I adore travelling around the world. In fact, I'm the travel expert.", audio: "audio/conv-1/12-christine.mp3", img: "images/avatars/christine.jpg" },
+            { char: "john", text: "Are you really from Ghana? Ghana's the number one football team in Africa. People call the football team the Brazil of Africa.", audio: "audio/conv-1/13-john.mp3", img: "images/avatars/john.jpg" },
+            { char: "eric", text: "Well, you... you must be John Forbes, our sports expert. Am I right?", audio: "audio/conv-1/14-eric.mp3", img: "images/avatars/eric.jpg" },
+            { char: "john", text: "Right, Eric. I love sports, especially rugby and football.", audio: "audio/conv-1/15-john.mp3", img: "images/avatars/john.jpg" },
+            { char: "lucy", text: "And how old are you, John?", audio: "audio/conv-1/16-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "john", text: "I'm 45 and I'm from Leeds.", audio: "audio/conv-1/17-john.mp3", img: "images/avatars/john.jpg" },
+            { char: "eric", text: "So you're English. Interesting. And what about you?", audio: "audio/conv-1/18-eric.mp3", img: "images/avatars/eric.jpg" },
+            { char: "tony", text: "Hello, my name's Anthony Moore, but my friends call me Tony. I'm from Brighton. But my parents aren't English.", audio: "audio/conv-1/19-tony.mp3", img: "images/avatars/tony.jpg" },
+            { char: "lucy", text: "Really? Where are your parents from?", audio: "audio/conv-1/20-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "tony", text: "Well, my mother's from Spain, and my father's from America.", audio: "audio/conv-1/21-tony.mp3", img: "images/avatars/tony.jpg" },
+            { char: "eric", text: "An international family. And what are your interests?", audio: "audio/conv-1/22-eric.mp3", img: "images/avatars/eric.jpg" },
+            { char: "tony", text: "Oh well I love music. Pop, rock, jazz, everything.", audio: "audio/conv-1/23-tony.mp3", img: "images/avatars/tony.jpg" },
+            { char: "lucy", text: "Good, a real music expert. Just right for our music program.", audio: "audio/conv-1/24-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "eric", text: "And this charming lady. What's your name?", audio: "audio/conv-1/25-eric.mp3", img: "images/avatars/eric.jpg" },
+            { char: "susan", text: "Hi Eric, and thanks for the compliment. I'm Susan Ferley. I'm English and, like all English people, I'm interested in the weather. I love talking about the weather.", audio: "audio/conv-1/26-susan.mp3", img: "images/avatars/susan.jpg" },
+            { char: "lucy", text: "Very good, because there's a program about the weather, and Susan's our expert.", audio: "audio/conv-1/27-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "eric", text: "Well, now let's meet Marie Cornwell and Tom Bradfield. They're the commentators for our let's talk discussions. Hello Marie, hello Tom, how are you?", audio: "audio/conv-1/28-eric.mp3", img: "images/avatars/eric.jpg" },
+            { char: "marie", text: "Fine thanks.", audio: "audio/conv-1/29-marie.mp3", img: "images/avatars/marie.jpg" },
+            { char: "tom", text: "Very well, thank you.", audio: "audio/conv-1/30-tom.mp3", img: "images/avatars/tom.jpg" },
+            { char: "lucy", text: "And where are you from, Marie?", audio: "audio/conv-1/31-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "marie", text: "I'm from Manchester.", audio: "audio/conv-1/32-marie.mp3", img: "images/avatars/marie.jpg" },
+            { char: "lucy", text: "The home of Manchester United! I love football. And what do you do there?", audio: "audio/conv-1/33-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "marie", text: "I'm a journalist.", audio: "audio/conv-1/34-marie.mp3", img: "images/avatars/marie.jpg" },
+            { char: "eric", text: "I see. And you Tom?", audio: "audio/conv-1/35-eric.mp3", img: "images/avatars/eric.jpg" },
+            { char: "tom", text: "I'm a journalist too.", audio: "audio/conv-1/36-tom.mp3", img: "images/avatars/tom.jpg" },
+            { char: "eric", text: "Very good, two journalists. Well, discuss lots of things with them, lots of different things.", audio: "audio/conv-1/37-eric.mp3", img: "images/avatars/eric.jpg" },
+            { char: "lucy", text: "Well, that's our team of experts. We're lucky, they're all very interesting people.", audio: "audio/conv-1/38-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "eric", text: "That's right. They... we're a great team.", audio: "audio/conv-1/39-eric.mp3", img: "images/avatars/eric.jpg" },
+            { char: "lucy", text: "Yes, we are. Okay, well goodbye for now. We'll see you soon on our TV programs.", audio: "audio/conv-1/40-lucy.mp3", img: "images/avatars/lucy.jpg" }
+        ];
+
+        // --- 3. المحادثة الثانية ---
+        const conv2Data = [
+            { char: "lucy", text: "Good morning, good morning from Lucy and welcome to \"Talk Cinema\", the programme about the cinema. Here in the studio is Sanjeev Gupta, our cinema expert... Hello, Sanjeev, how are you?", audio: "audio/conv-2/01-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "I'm fine, thanks... and good morning to all our viewers.", audio: "audio/conv-2/02-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "Ok Sanjeev, what are you talking about today?", audio: "audio/conv-2/03-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "Well... about a great Hollywood star... George Clooney.", audio: "audio/conv-2/04-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "Oh, George Clooney?", audio: "audio/conv-2/05-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "Yes, George Clooney. Are you a fan, Lucy?", audio: "audio/conv-2/06-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "Yes, of course I am.", audio: "audio/conv-2/07-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "Well, George Clooney is very good-looking. He has many fans, many young women are his fans... like you Lucy.", audio: "audio/conv-2/08-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "Yes, yes, I'm a George Clooney fan. He's very handsome... Well Sanjeev, where is George Clooney from?", audio: "audio/conv-2/09-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "He's from Kentucky in the USA.", audio: "audio/conv-2/10-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "And how old is he?", audio: "audio/conv-2/11-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "He's 45.", audio: "audio/conv-2/12-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "Is he only an actor?", audio: "audio/conv-2/13-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "No, he's an actor, a film director and a screenwriter.", audio: "audio/conv-2/14-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "An actor, a film director and a screenwriter, he's a very interesting man...", audio: "audio/conv-2/15-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "Yes, he is. And he's very rich too...", audio: "audio/conv-2/16-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "Is he?", audio: "audio/conv-2/17-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "Yes, he is. He has two villas on Lake Como in Italy and a small house in Lima in Peru...", audio: "audio/conv-2/18-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "What are his interests?", audio: "audio/conv-2/19-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "His main interest is politics. He's a democrat with liberal ideas.", audio: "audio/conv-2/20-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "Like me! And his hobbies?", audio: "audio/conv-2/21-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "His hobbies are basketball and motorbikes.", audio: "audio/conv-2/22-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "Really? He's a very interesting man... Now, another question.", audio: "audio/conv-2/23-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "Yes?", audio: "audio/conv-2/24-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "Is he married?", audio: "audio/conv-2/25-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "No, he isn't, he's divorced.", audio: "audio/conv-2/26-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "So, he isn't married... he's single... and he's rich...", audio: "audio/conv-2/27-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "Yes, and remember, he's an actor, a film director and a screenwriter... that's George Clooney... a great Hollywood star...", audio: "audio/conv-2/28-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "Well, thank you Sanjeev.", audio: "audio/conv-2/29-lucy.mp3", img: "images/avatars/lucy.jpg" },
+            { char: "sanjeev", text: "You're welcome!... And goodbye to everyone.", audio: "audio/conv-2/30-sanjeev.mp3", img: "images/avatars/sanjeev.jpg" },
+            { char: "lucy", text: "And goodbye from me, Lucy Ross.", audio: "audio/conv-2/31-lucy.mp3", img: "images/avatars/lucy.jpg" }
+        ];
+
+        // --- 4. أسئلة المحادثتين ---
+        const storyQuizData = [
+            { q: "Where is Sanjeev from?", opts: ["New Delhi", "London", "Brighton"], ans: "New Delhi" },
+            { q: "Who is the travel expert?", opts: ["Tony", "Christine", "Susan"], ans: "Christine" },
+            { q: "John Forbes is the ______ expert.", opts: ["travel", "sports", "weather"], ans: "sports" },
+            { q: "Where is John Forbes from?", opts: ["Leeds", "London", "Manchester"], ans: "Leeds" },
+            { q: "How old is John Forbes?", opts: ["35", "40", "45"], ans: "45" },
+            { q: "Tony's parents are from ______ and ______.", opts: ["Spain / America", "Ghana / London", "India / Spain"], ans: "Spain / America" },
+            { q: "Who loves talking about the weather?", opts: ["Marie", "Susan", "Lucy"], ans: "Susan" },
+            { q: "Marie and Tom are ______.", opts: ["presenters", "journalists", "experts"], ans: "journalists" },
+            { q: "George Clooney is from ______.", opts: ["Kentucky in the USA", "Lima in Peru", "Lake Como in Italy"], ans: "Kentucky in the USA" },
+            { q: "How old is George Clooney?", opts: ["45", "50", "55"], ans: "45" },
+            { q: "George Clooney is an actor, a film director, and a ______.", opts: ["presenter", "journalist", "screenwriter"], ans: "screenwriter" },
+            { q: "What is George Clooney's main interest?", opts: ["sports", "politics", "cinema"], ans: "politics" },
+            { q: "What are his hobbies?", opts: ["basketball and motorbikes", "football and tennis", "rugby and music"], ans: "basketball and motorbikes" },
+            { q: "Is George Clooney married?", opts: ["Yes, he is", "No, he isn't, he's single", "No, he isn't, he's divorced"], ans: "No, he isn't, he's divorced" }
+        ];
+
+        // --- 5. أسئلة الجرامر ---
+        const grammarQuizData = [
+            { q: "I ___ a teacher.", opts: ["am", "is", "are"], ans: "am" },
+            { q: "He ___ a student.", opts: ["am", "is", "are"], ans: "is" },
+            { q: "They ___ from Egypt.", opts: ["am", "is", "are"], ans: "are" },
+            { q: "She ___ my sister.", opts: ["am", "is", "are"], ans: "is" },
+            { q: "We ___ happy.", opts: ["am", "is", "are"], ans: "are" },
+            { q: "You ___ my best friend.", opts: ["am", "is", "are"], ans: "are" },
+            { q: "It ___ a cat.", opts: ["am", "is", "are"], ans: "is" }
+        ];
+
+        // ================= APP LOGIC =================
+        let currentDialogue = [];
+
+        function getFeedbackMessage(score, total) {
+            let percentage = (score / total) * 100;
+            let name = window.currentStudentName || "Student";
+            if (percentage < 50) return `<span style='color: #e74c3c;'>Keep practicing, ${name}! 💪</span>`;
+            if (percentage <= 75) return `<span style='color: #f39c12;'>Almost there, ${name} 👍</span>`;
+            return `<span style='color: #27ae60;'>Well done, ${name}! 🌟</span>`;
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('audio, video, iframe').forEach(m => { 
+                if (m.tagName === 'IFRAME') {
+                    let currentSrc = m.src;
+                    m.src = ''; 
+                    m.src = currentSrc;
+                } else {
+                    m.pause(); 
+                    m.currentTime = 0; 
+                }
+            });
+        }
+
+        function playCorrect() { let s = document.getElementById('correctAudio'); s.currentTime = 0; s.play().catch(e=>{}); }
+        function playWrong() { let s = document.getElementById('wrongAudio'); s.currentTime = 0; s.play().catch(e=>{}); }
+
+        // --- STORY QUIZ ---
+        let sqIdx = 0, sqScore = 0;
+        function startStoryQuiz() { sqIdx = 0; sqScore = 0; document.getElementById('story-quiz-area').style.display = 'block'; document.getElementById('sq-result-area').style.display = 'none'; showScreen('screen-story-quiz'); loadSq(); }
+        function loadSq() {
+            if(storyQuizData.length === 0) return;
+            let area = document.getElementById('sq-options'); area.innerHTML = '';
+            document.getElementById('sqNextBtn').style.display = 'none';
+            let qData = storyQuizData[sqIdx];
+            document.getElementById('sqQuestionText').innerText = qData.q;
+            [...qData.opts].sort(() => 0.5 - Math.random()).forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'quiz-btn'; btn.innerText = opt;
+                btn.onclick = () => {
+                    document.querySelectorAll('#sq-options .quiz-btn').forEach(b => b.disabled = true);
+                    if(opt === qData.ans) { sqScore++; btn.style.background = '#4caf50'; btn.style.color = 'white'; playCorrect(); } 
+                    else { btn.style.background = '#f44336'; btn.style.color = 'white'; playWrong(); document.querySelectorAll('#sq-options .quiz-btn').forEach(b => { if(b.innerText === qData.ans) { b.style.background = '#4caf50'; b.style.color = 'white'; } }); }
+                    document.getElementById('sqNextBtn').style.display = 'block';
+                };
+                area.appendChild(btn);
+            });
+            document.getElementById('sqProgress').innerText = `Question: ${sqIdx + 1} / ${storyQuizData.length}`;
+        }
+        function nextSqQuestion() {
+            sqIdx++; 
+            if(sqIdx < storyQuizData.length) { 
+                loadSq(); 
+            } else { 
+                document.getElementById('story-quiz-area').style.display = 'none'; 
+                document.getElementById('sq-result-area').style.display = 'block'; 
+                document.getElementById('sqFeedbackMsg').innerHTML = getFeedbackMessage(sqScore, storyQuizData.length);
+                document.getElementById('sqScoreFraction').innerText = `Correct: ${sqScore} / ${storyQuizData.length}`; 
+                document.getElementById('sqFinalScore').innerText = Math.round((sqScore/storyQuizData.length)*100) + '%'; 
+            }
+        }
+
+        // --- FLASHCARDS ---
+        let curW = 0;
+        function updateCard() {
+            if(wordsData.length === 0) return;
+            let w = wordsData[curW];
+            document.getElementById('fcWordMain').innerText = w.main; 
+            document.getElementById('fcWordSub').innerHTML = w.sub; 
+            
+            let formattedText = `
+                <span style="color: #E65100; font-weight: bold;">Definition:</span> <span style="color: #333;">${w.def}</span><br><br>
+                <span style="color: #27ae60; font-weight: bold;">Example:</span> <span style="color: #555; font-style: italic;">${w.ex}</span>
+            `;
+            
+            document.getElementById('fcWordEx').innerHTML = formattedText;
+            document.getElementById('fcImg').src = w.img; 
+            document.getElementById('wordAudio').src = w.audio;
+            document.getElementById('fcCounter').innerText = `${curW + 1} / ${wordsData.length}`; 
+            document.getElementById('fcBox').classList.remove('flipped');
+        }
+        function nextCard() { if(curW < wordsData.length - 1) { curW++; updateCard(); } }
+        function prevCard() { if(curW > 0) { curW--; updateCard(); } }
+        function playWordAudio() { document.getElementById('wordAudio').play().catch(e=>{}); }
+        updateCard();
+
+        // --- WORDS QUIZ ---
+        let wqIdx = 0, wqScore = 0;
+        function startWordsQuiz() { wqIdx = 0; wqScore = 0; document.getElementById('wq-question-area').style.display = 'block'; document.getElementById('wq-result-area').style.display = 'none'; showScreen('screen-words-quiz'); loadWq(); }
+        function playWqAudio() { document.getElementById('wqAudio').play().catch(e=>{}); }
+        function loadWq() {
+            if(wordsData.length === 0) return;
+            let area = document.getElementById('wq-options'); area.innerHTML = '';
+            document.getElementById('wqNextBtn').style.display = 'none'; 
+            let correctWord = wordsData[wqIdx];
+            document.getElementById('wqAudio').src = correctWord.audio;
+            let wrongs = wordsData.filter(w => w.main !== correctWord.main).sort(() => 0.5 - Math.random());
+            let options = [correctWord.main];
+            for(let i=0; i<Math.min(3, wrongs.length); i++) options.push(wrongs[i].main);
+            options.sort(() => 0.5 - Math.random());
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'quiz-btn'; btn.innerText = opt;
+                btn.onclick = () => {
+                    document.querySelectorAll('#wq-options .quiz-btn').forEach(b => b.disabled = true);
+                    if(opt === correctWord.main) { wqScore++; btn.style.background = '#4caf50'; btn.style.color = 'white'; playCorrect(); } 
+                    else { btn.style.background = '#f44336'; btn.style.color = 'white'; playWrong(); document.querySelectorAll('#wq-options .quiz-btn').forEach(b => { if(b.innerText === correctWord.main) { b.style.background = '#4caf50'; b.style.color = 'white'; } }); }
+                    document.getElementById('wqNextBtn').style.display = 'block'; 
+                };
+                area.appendChild(btn);
+            });
+            document.getElementById('wqProgress').innerText = `Question: ${wqIdx + 1} / ${wordsData.length}`;
+        }
+        function nextWqQuestion() {
+            wqIdx++; 
+            if(wqIdx < wordsData.length) { 
+                loadWq(); 
+            } else { 
+                document.getElementById('wq-question-area').style.display = 'none'; 
+                document.getElementById('wq-result-area').style.display = 'block'; 
+                document.getElementById('wqFeedbackMsg').innerHTML = getFeedbackMessage(wqScore, wordsData.length);
+                document.getElementById('wqScoreFraction').innerText = `Correct: ${wqScore} / ${wordsData.length}`; 
+                document.getElementById('wqFinalScore').innerText = Math.round((wqScore/wordsData.length)*100) + '%'; 
+            }
+        }
+
+        // --- LEARN LINES ---
+        let curL = 0;
+        function startLearnLinesMenu() { showScreen('screen-learn-lines-menu'); }
+        function startLearnLines(convNum) { currentDialogue = convNum === 1 ? conv1Data : conv2Data; curL = 0; if(currentDialogue.length > 0){ showScreen('screen-learn-lines'); updateLearn(); } else alert("No data available yet."); }
+        function updateLearn() {
+            document.getElementById('learnChar').innerText = currentDialogue[curL].char; document.getElementById('learnText').innerText = currentDialogue[curL].text;
+            document.getElementById('learnCounter').innerText = `${curL + 1} / ${currentDialogue.length}`; document.getElementById('learnAudio').src = currentDialogue[curL].audio;
+        }
+        function nextLearn() { if(curL < currentDialogue.length - 1) { curL++; updateLearn(); } }
+        function prevLearn() { if(curL > 0) { curL--; updateLearn(); } }
+        function playLearnAudio() { document.getElementById('learnAudio').play().catch(e=>{}); }
+
+        // --- LWC (LISTEN & WRITE STORY) ---
+        let lwcIdx = 0, lwcScore = 0;
+        function startLwcMenu() { showScreen('screen-lwc-menu'); }
+        function startLwc(convNum) { currentDialogue = convNum === 1 ? conv1Data : conv2Data; lwcIdx = 0; lwcScore = 0; if(currentDialogue.length > 0){ document.getElementById('lwc-content-area').style.display = 'block'; document.getElementById('lwc-result-area').style.display = 'none'; showScreen('screen-listen-write-conv'); loadLwc(); } else alert("No data available yet."); }
+        function loadLwc() {
+            document.getElementById('lwcAudio').src = currentDialogue[lwcIdx].audio; document.getElementById('lwcInput').value = ''; document.getElementById('lwcInput').disabled = false;
+            document.getElementById('lwcFeedback').style.display = 'none'; document.getElementById('lwcNextBtn').style.display = 'none'; document.getElementById('lwcCheckBtn').style.display = 'block';
+            document.getElementById('lwcProgress').innerText = `${lwcIdx + 1} / ${currentDialogue.length}`; setTimeout(() => document.getElementById('lwcInput').focus(), 100);
+        }
+        function playLwcAudio() { document.getElementById('lwcAudio').play().catch(e=>{}); }
+        function checkLwcAnswer() {
+            let input = document.getElementById('lwcInput').value; if(!input.trim()) return;
+            let cleanCorrect = currentDialogue[lwcIdx].text.replace(/[^\w\s']/g, '').trim().toLowerCase(); let cleanInput = input.replace(/[^\w\s']/g, '').trim().toLowerCase();
+            let fb = document.getElementById('lwcFeedback'); fb.style.display = 'block';
+            document.getElementById('lwcInput').disabled = true; document.getElementById('lwcCheckBtn').style.display = 'none'; document.getElementById('lwcNextBtn').style.display = 'block';
+            if(cleanInput === cleanCorrect) { lwcScore++; fb.innerHTML = "Excellent! 👏"; fb.style.color = "#4caf50"; playCorrect(); } 
+            else { fb.innerHTML = `Wrong ❌<br><span style="font-size:16px;color:#555;">Correct: ${currentDialogue[lwcIdx].text}</span>`; fb.style.color = "#f44336"; playWrong(); }
+        }
+        function nextLwcLine() {
+            lwcIdx++; 
+            if(lwcIdx < currentDialogue.length) { 
+                loadLwc(); 
+            } else { 
+                document.getElementById('lwc-content-area').style.display = 'none'; 
+                document.getElementById('lwc-result-area').style.display = 'block'; 
+                document.getElementById('lwcFeedbackMsg').innerHTML = getFeedbackMessage(lwcScore, currentDialogue.length);
+                document.getElementById('lwcScoreFraction').innerText = `Correct: ${lwcScore} / ${currentDialogue.length}`; 
+                document.getElementById('lwcFinalScore').innerText = Math.round((lwcScore/currentDialogue.length)*100) + '%'; 
+            }
+        }
+        document.getElementById('lwcInput').addEventListener('keypress', e => { if(e.key === 'Enter') checkLwcAnswer(); });
+
+        // --- ROLEPLAY ---
+        let userRole = "", curR = 0, isRec = false, mediaRecorder, audioChunks = [], recLines = [];
+        function startRoleplayMenu() { showScreen('screen-roleplay-menu'); }
+        function startRoleplaySelect(convNum) {
+            currentDialogue = convNum === 1 ? conv1Data : conv2Data;
+            if(currentDialogue.length === 0) { alert("No data available yet."); return; }
+            let container = document.getElementById('roleplay-buttons-area'); container.innerHTML = '';
+            let characters = [...new Set(currentDialogue.map(d => d.char))];
+            characters.forEach(char => {
+                let charImg = currentDialogue.find(d => d.char === char).img;
+                let btn = document.createElement('div'); btn.className = 'role-btn'; btn.onclick = () => startRoleplay(char);
+                btn.innerHTML = `<img src="${charImg}" class="role-avatar" alt="${char}" onerror="this.src='images/icons/logo.png';"><div class="role-name">${char}</div>`;
+                container.appendChild(btn);
+            });
+            showScreen('screen-roleplay-select');
+        }
+        function startRoleplay(r) { userRole = r; curR = 0; recLines = []; document.getElementById('rp-content-area').style.display = 'block'; document.getElementById('rp-result-area').style.display = 'none'; showScreen('screen-roleplay-active'); nextRp(); }
+        function nextRp() {
+            document.getElementById('userAudioPlayback').style.display = 'none'; if(isRec) toggleRecording();
+            if(curR >= currentDialogue.length) { document.getElementById('rp-content-area').style.display = 'none'; document.getElementById('rp-result-area').style.display = 'block'; return; }
+            let d = currentDialogue[curR];
+            document.getElementById('rpChar').innerText = d.char; document.getElementById('rpText').innerText = d.text;
+            let ind = document.getElementById('rpIndicator');
+            if(d.char === userRole) { ind.innerText = "YOUR TURN 🎤"; ind.className = "turn-indicator your-turn"; document.getElementById('micArea').style.display = 'block'; } 
+            else { ind.innerText = "LISTEN 🔊"; ind.className = "turn-indicator app-turn"; document.getElementById('micArea').style.display = 'none'; document.getElementById('rpAudio').src = d.audio; document.getElementById('rpAudio').play().catch(e=>{}); }
+            curR++;
+        }
+        async function toggleRecording() {
+            let btn = document.getElementById('btnRecord'); let play = document.getElementById('userAudioPlayback');
+            if(!isRec) {
+                try { 
+                    let stream = await navigator.mediaDevices.getUserMedia({
+                        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+                    }); 
+                    mediaRecorder = new MediaRecorder(stream); audioChunks = []; mediaRecorder.start(); 
+                    mediaRecorder.ondataavailable = e => audioChunks.push(e.data); 
+                    mediaRecorder.onstop = () => { 
+                        let blob = new Blob(audioChunks, {type:'audio/mp3'}); 
+                        play.src = URL.createObjectURL(blob); play.style.display = 'block'; 
+                        recLines[curR-1] = blob;
+                    }; 
+                    isRec = true; btn.style.background = '#f44336'; btn.innerHTML = "⏹️ Stop"; 
+                } catch(e) { alert("Microphone access blocked."); }
+            } else { 
+                mediaRecorder.stop(); isRec = false; btn.style.background = '#4caf50'; btn.innerHTML = "🎙️ Record Again"; 
+            }
+        }
+
+        // --- ROLEPLAY PLAYBACK ---
+        let pbPlayer = document.getElementById('seqAudioPlayer'), curPb = 0, isSeqPlay = false;
+        function startRoleplayPlayback() { showScreen('screen-roleplay-playback'); isSeqPlay = false; curPb = 0; document.getElementById('btnPlayAllDialogue').innerHTML = '▶️ Play Entire Dialogue'; buildPbList(); }
+        function buildPbList() {
+            let list = document.getElementById('playbackList'); list.innerHTML = '';
+            currentDialogue.forEach((d, i) => {
+                let item = document.createElement('div'); item.className = 'playback-item'; item.id = `pbLine${i}`;
+                let char = document.createElement('p'); char.style.fontWeight = "bold"; char.style.color = "var(--light-blue)"; char.innerText = (d.char === userRole) ? "Student" : d.char;
+                let txt = document.createElement('p'); txt.style.fontWeight = "bold"; txt.innerText = d.text;
+                let btn = document.createElement('button'); btn.className = 'btn-action'; btn.style.marginTop = '10px'; btn.style.padding = '8px'; btn.innerHTML = '🔊 Listen'; btn.onclick = () => playSinglePb(i);
+                item.appendChild(char); item.appendChild(txt); item.appendChild(btn); list.appendChild(item);
+            });
+        }
+        function playSinglePb(i) { isSeqPlay = false; curPb = i; pbPlayer.pause(); document.getElementById('btnPlayAllDialogue').innerHTML = '▶️ Play Entire Dialogue'; hlPb(i); playAudioPb(i); }
+        function playAudioPb(i) {
+            let d = currentDialogue[i];
+            if(d.char === userRole && recLines[i]) { pbPlayer.src = URL.createObjectURL(recLines[i]); pbPlayer.play().catch(e=>{if(isSeqPlay) nextPb();}); }
+            else if(d.char !== userRole) { pbPlayer.src = d.audio; pbPlayer.play().catch(e=>{if(isSeqPlay) nextPb();}); }
+            else { if(isSeqPlay) nextPb(); }
+        }
+        document.getElementById('btnPlayAllDialogue').onclick = function() {
+            if(!isSeqPlay) { isSeqPlay = true; curPb = 0; this.innerHTML = '⏸️ Pause'; nextPb(); }
+            else { isSeqPlay = false; pbPlayer.pause(); this.innerHTML = '▶️ Play Entire Dialogue'; }
+        };
+        function nextPb() {
+            if(!isSeqPlay) return;
+            if(curPb < currentDialogue.length) { hlPb(curPb); playAudioPb(curPb); curPb++; }
+            else { isSeqPlay = false; document.getElementById('btnPlayAllDialogue').innerHTML = '▶️ Play Entire Dialogue'; curPb = 0; }
+        }
+        pbPlayer.addEventListener('ended', () => { if(isSeqPlay) nextPb(); });
+        function hlPb(i) { 
+            document.getElementById('playbackList').childNodes.forEach(el => el.style.borderColor = "var(--border-color)"); 
+            let cur = document.getElementById(`pbLine${i}`); 
+            if(cur) { cur.style.borderColor = "var(--light-blue)"; cur.scrollIntoView({behavior:'smooth', block:'center'}); } 
+        }
+
+        // --- GRAMMAR QUIZ ---
+        let gqIdx = 0, gqScore = 0;
+        function startGrammarQuiz() { gqIdx = 0; gqScore = 0; document.getElementById('gq-question-area').style.display = 'block'; document.getElementById('gq-result-area').style.display = 'none'; showScreen('screen-grammar-quiz'); loadGq(); }
+        function loadGq() {
+            if(grammarQuizData.length === 0) return;
+            let area = document.getElementById('gq-options'); area.innerHTML = ''; document.getElementById('gqNextBtn').style.display = 'none';
+            let qData = grammarQuizData[gqIdx]; document.getElementById('gqQuestionText').innerText = qData.q;
+            [...qData.opts].sort(() => 0.5 - Math.random()).forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'quiz-btn'; btn.innerText = opt;
+                btn.onclick = () => {
+                    document.querySelectorAll('#gq-options .quiz-btn').forEach(b => b.disabled = true);
+                    if(opt === qData.ans) { gqScore++; btn.style.background = '#4caf50'; btn.style.color = 'white'; playCorrect(); } 
+                    else { btn.style.background = '#f44336'; btn.style.color = 'white'; playWrong(); document.querySelectorAll('#gq-options .quiz-btn').forEach(b => { if(b.innerText === qData.ans) { b.style.background = '#4caf50'; b.style.color = 'white'; } }); }
+                    document.getElementById('gqNextBtn').style.display = 'block';
+                };
+                area.appendChild(btn);
+            });
+            document.getElementById('gqProgress').innerText = `Question: ${gqIdx + 1} / ${grammarQuizData.length}`;
+        }
+
+        // 🔥 التعديل هنا: إرسال إشارة النجاح للبوابة عند إنهاء الجرامر كويز 🔥
+        function nextGqQuestion() {
+            gqIdx++; 
+            if(gqIdx < grammarQuizData.length) { 
+                loadGq(); 
+            } else { 
+                document.getElementById('gq-question-area').style.display = 'none'; 
+                document.getElementById('gq-result-area').style.display = 'block'; 
+                document.getElementById('gqFeedbackMsg').innerHTML = getFeedbackMessage(gqScore, grammarQuizData.length);
+                document.getElementById('gqScoreFraction').innerText = `Correct: ${gqScore} / ${grammarQuizData.length}`; 
+                document.getElementById('gqFinalScore').innerText = Math.round((gqScore/grammarQuizData.length)*100) + '%'; 
+
+                // سطر إرسال النجاح للفايربيز
+                if(window.markLessonCompleted) window.markLessonCompleted();
+            }
+        }
+    </script>
+</body>
+</html>
