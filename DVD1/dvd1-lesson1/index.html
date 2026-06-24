@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Today Interactive - Lesson 1</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ستايل شاشة السينما لفيديوهات جوجل درايف/رومبل عشان تبقى متجاوبة مع الموبايل */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 0;
+        }
+        .btn-back-portal {
+            background: #f8f9fa; border: 2px solid #e74c3c; color: #e74c3c; font-weight: bold; font-size: 18px; 
+            cursor: pointer; padding: 10px 20px; border-radius: 10px; width: 100%; margin-bottom: 20px; 
+            transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-back-portal:hover { background: #e74c3c; color: white; }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+
+        <div id="home-stage" class="stage active watermark-bg">
+            <button class="btn-back-portal" onclick="window.location.href='../../index.html'">🔙 Back to Master Portal</button>
+            
+            <img src="images/logo.png" alt="Logo" class="small-logo" onerror="this.style.display='none'">
+            <h1 class="main-title">Interactive Learning</h1>
+            <h2 id="welcome-message" style="color: #e74c3c; font-size: 1.4rem;">Welcome!</h2>
+            <h3 style="color: #34495e; font-size: 1.1rem; margin-bottom: 20px;">Lesson 1: Nice to meet you</h3>
+            
+            <div class="menu-container">
+                <button class="menu-btn" onclick="goToStage('intro-stage')">🎬 1. Watch Intro</button>
+                <button class="menu-btn" onclick="goToStage('video-stage')">🎬 2. Watch Conversation</button>
+                <button class="menu-btn" onclick="goToStage('story-quiz-stage')">🧠 3. Story Quiz</button>
+                <button class="menu-btn" onclick="goToStage('words-stage')">🃏 4. Vocabulary Practice</button>
+                <button class="menu-btn" onclick="goToStage('quiz-stage')">📝 5. Words Quiz</button>
+                <button class="menu-btn" onclick="goToStage('dictation-stage')">✍️ 6. Listen & Write</button>
+                <button class="menu-btn" onclick="goToStage('learn-stage')">🎭 7. Roleplay Mode</button>
+                <button class="menu-btn" onclick="goToStage('grammar-video-stage')">👨‍🏫 8. Grammar Lesson</button>
+            </div>
+            <div class="author-footer">Developed by Hisham Embaby</div>
+        </div>
+
+        <div id="intro-stage" class="stage">
+            <button class="back-home-btn" onclick="goToHome()">🏠 Menu</button>
+            <h1>Intro Video</h1>
+            <div class="video-container">
+                <iframe id="intro-iframe" src="https://rumble.com/embed/v76sa5e/?pub=4patlm" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+            </div>
+            <br>
+            <button id="next-intro-btn" class="action-btn" onclick="playNextIntro()" style="background-color: #e67e22;">Next Intro Video ➡️</button>
+            <button id="finish-intro-btn" class="hidden action-btn" onclick="goToStage('video-stage')">Next: Conversation 🎬</button>
+            <div class="author-footer">Developed by Hisham Embaby</div>
+        </div>
+
+        <div id="video-stage" class="stage">
+            <button class="back-home-btn" onclick="goToHome()">🏠 Menu</button>
+            <h1>Conversation Story</h1>
+            <div class="video-container">
+                <iframe id="story-iframe" src="https://rumble.com/embed/v76sao8/?pub=4patlm" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+            </div>
+            <button class="action-btn" onclick="goToStage('story-quiz-stage')">Next: Story Quiz 🧠</button>
+            <div class="author-footer">Developed by Hisham Embaby</div>
+        </div>
+
+        <div id="story-quiz-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">🏠 Menu</button>
+            <h1>Story Quiz</h1>
+            <p id="sq-quiz-counter" class="counter-style">Question 1 of 4</p>
+            <div id="sq-quiz-content">
+                <p id="sq-question-text" style="font-size: 1.2rem; font-weight: bold;"></p>
+                <div id="sq-options-container"></div>
+                <p id="sq-feedback-text"></p>
+                <button id="sq-next-question-btn" class="hidden action-btn">Next Question ➡️</button>
+            </div>
+            <div id="sq-final-score-container" class="hidden">
+                <h2 id="sq-score-text" style="font-size: 1.8rem; color: #27ae60;">0%</h2>
+                <button class="action-btn" onclick="goToStage('words-stage')" style="margin-top: 15px;">Next: Vocabulary 👉</button>
+            </div>
+            <div class="author-footer">Developed by Hisham Embaby</div>
+        </div>
+
+        <div id="words-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">🏠 Menu</button>
+            <h1>Difficult Words</h1>
+            <div class="flashcard-container" id="flashcard-container">
+                <div class="flashcard-inner" id="flashcard-inner">
+                    <div class="flashcard-front">
+                        <img id="card-image" src="" alt="Word">
+                        <p id="card-word">Word</p>
+                        <p class="click-hint">👉 Click to flip</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <p id="card-translation" dir="rtl">الترجمة</p>
+                        <div class="example-box">
+                            <p id="card-example-en">Example</p>
+                            <p class="click-hint">👉 Click to return</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="controls-container">
+                <audio id="card-audio" src=""></audio>
+                <button id="play-audio-btn">🔊 Play Audio</button>
+                <div class="navigation-buttons">
+                    <button id="prev-word-btn">Previous</button>
+                    <span id="word-counter-text" style="font-weight: bold;">1 / 17</span>
+                    <button id="next-word-btn">Next</button>
+                </div>
+                <button id="to-quiz-btn" class="action-btn" style="background-color: #e67e22;" onclick="goToStage('quiz-stage')">📝 Words Quiz</button>
+            </div>
+            <div class="author-footer">Developed by Hisham Embaby</div>
+        </div>
+
+        <div id="quiz-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">🏠 Menu</button>
+            <h1>Words Quiz</h1>
+            <p id="quiz-counter" class="counter-style">Question 1 of 17</p>
+            <div id="quiz-content">
+                <p id="question-text" style="font-size: 1.2rem; font-weight: bold;"></p>
+                <div id="options-container"></div>
+                <p id="feedback-text"></p>
+                <button id="next-question-btn" class="hidden action-btn">Next Question ➡️</button>
+            </div>
+            <div id="final-score-container" class="hidden">
+                <h2 id="score-text" style="font-size: 1.8rem; color: #27ae60;">0%</h2>
+                <button class="action-btn" onclick="goToStage('dictation-stage')" style="margin-top: 15px;">Next: Listen & Write ✍️</button>
+            </div>
+            <div class="author-footer">Developed by Hisham Embaby</div>
+        </div>
+
+        <div id="dictation-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">🏠 Menu</button>
+            <h1>Listen & Write ✍️</h1>
+            <p id="dictation-counter" class="counter-style">Sentence 1 of 3</p>
+            <div id="dictation-content" style="text-align: center;">
+                <button id="play-dictation-btn" class="action-btn" style="background-color: #3498db; margin-bottom: 20px; font-size: 1rem; width: auto; padding: 10px 20px;">🔊 Play Sentence</button>
+                <br>
+                <textarea id="dictation-input" placeholder="Type what you hear here..." style="width: 85%; height: 80px; font-size: 1.2rem; padding: 10px; border-radius: 8px; border: 2px solid #bdc3c7; margin-bottom: 10px; resize: none;"></textarea>
+                <br>
+                <p id="dictation-feedback" style="font-weight: bold; font-size: 1.2rem; margin: 10px 0;"></p>
+                <button id="check-dictation-btn" class="action-btn" style="background-color: #27ae60; width: auto; padding: 10px 20px;">Check Answer ✅</button>
+                <button id="show-answer-btn" class="action-btn hidden" style="background-color: #e74c3c; width: auto; padding: 10px 20px; margin-top: 10px;">Show Answer 👀</button>
+                <button id="next-dictation-btn" class="hidden action-btn" style="background-color: #e67e22; width: auto; padding: 10px 20px; margin-top: 10px;">Next Sentence ➡️</button>
+            </div>
+            <div id="dictation-final" class="hidden">
+                <h2 id="dictation-score-text" style="font-size: 1.8rem; color: #27ae60;">0%</h2>
+                <button class="action-btn" onclick="goToStage('learn-stage')" style="margin-top: 15px;">Next: Roleplay 🎭</button>
+            </div>
+            <div class="author-footer">Developed by Hisham Embaby</div>
+        </div>
+
+        <div id="learn-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">🏠 Menu</button>
+            <h1>Learn the Lines</h1>
+            <div class="conversation-card">
+                <img id="speaker-img" src="images/jack.jpg" alt="Speaker" onerror="this.src='images/logo.png'">
+                <h3 id="speaker-name" class="speaker-name">Jack</h3>
+                <p id="english-line" class="english-line">Hello. I'm Jack.</p>
+            </div>
+            <div class="controls-container">
+                <audio id="line-audio" src=""></audio>
+                <button id="play-line-btn">🔊 Listen to Line</button>
+                <div class="navigation-buttons">
+                    <button id="prev-line-btn">Previous</button>
+                    <span id="line-counter-text" style="font-weight: bold;">1 / 29</span>
+                    <button id="next-line-btn">Next</button>
+                </div>
+                <button onclick="goToStage('character-select-stage')" class="action-btn" style="background-color: #e74c3c;">🎙️ Start Roleplay</button>
+            </div>
+            <div class="author-footer">Developed by Hisham Embaby</div>
+        </div>
+
+        <div id="character-select-stage" class="stage">
+            <button class="back-home-btn" onclick="goToHome()">🏠 Menu</button>
+            <h1>Choose Your Role</h1>
+            <p style="margin-bottom: 20px; font-weight: bold;">Who do you want to be?</p>
+            <div class="character-buttons">
+                <button id="choose-jack" class="char-btn">
+                    <img src="images/jack.jpg" alt="Jack" onerror="this.src='images/logo.png'">
+                    <span>Play as Jack</span>
+                </button>
+                <button id="choose-anne" class="char-btn">
+                    <img src="images/anne.jpg" alt="Anne" onerror="this.src='images/logo.png'">
+                    <span>Play as Anne</span>
+                </button>
+                <button id="choose-alice" class="char-btn">
+                    <img src="images/alice.jpg" alt="Alice" onerror="this.src='images/logo.png'">
+                    <span>Play as Alice</span>
+                </button>
+            </div>
+            <button onclick="goToStage('learn-stage')" style="margin-top: 20px; padding: 10px; border-radius: 8px; border:none; background-color: #7f8c8d; color: white; cursor: pointer; width: 100%;">Back to Lines</button>
+            <div class="author-footer">Developed by Hisham Embaby</div>
+        </div>
+
+        <div id="roleplay-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">🏠 Menu</button>
+            <h1>Roleplay Mode</h1>
+            <p id="roleplay-score" style="font-weight: bold; color: #27ae60; font-size: 1.2rem; margin-bottom: 10px;">Your Score: 0 / 0</p>
+            <div id="chat-box" class="chat-box"></div>
+            <div id="mic-container" class="mic-container hidden">
+                <p id="your-turn-text" class="your-turn">It's your turn! Say:</p>
+                <p id="line-to-say" class="line-to-say">Hello!</p>
+                <button id="mic-btn" class="mic-btn">🎙️</button>
+                <p id="mic-status">Tap mic to speak</p>
+                <div id="speech-result" class="speech-result hidden"></div>
+            </div>
+            <button id="playback-roleplay" class="hidden action-btn" style="background-color: #e67e22; margin-top: 10px;">🎧 Listen to Your Roleplay</button>
+            <button id="next-dialogue-btn" class="hidden action-btn" style="background-color: #27ae60;">Continue ➡️</button>
+            <button id="restart-roleplay" class="hidden action-btn" style="background-color: #9b59b6;">🔄 Play Another Role</button>
+            <div class="author-footer">Developed by Hisham Embaby</div>
+        </div>
+
+        <div id="grammar-video-stage" class="stage">
+            <button class="back-home-btn" onclick="goToHome()">🏠 Menu</button>
+            <h1>Grammar Lesson</h1>
+            <h2 style="font-size: 1.2rem;">"Grammar Focus"</h2>
+            <div class="video-container">
+                <iframe id="grammar-iframe" src="https://rumble.com/embed/v76sb3s/?pub=4patlm" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+            </div>
+            <br>
+            <button id="next-grammar-btn" class="action-btn" onclick="playNextGrammar()" style="background-color: #3498db;">Next Grammar Video ➡️</button>
+            <button id="finish-grammar-btn" class="hidden action-btn" onclick="goToStage('grammar-quiz-stage')" style="background-color: #e67e22;">Next: Grammar Quiz 📝</button>
+            <div class="author-footer">Developed by Hisham Embaby</div>
+        </div>
+
+        <div id="grammar-quiz-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">🏠 Menu</button>
+            <h1>Grammar Quiz</h1>
+            <p id="g-quiz-counter" class="counter-style">Question 1 of 5</p>
+            <div id="g-quiz-content">
+                <p id="g-question-text" style="font-size: 1.2rem; font-weight: bold;"></p>
+                <div id="g-options-container"></div>
+                <p id="g-feedback-text"></p>
+                <button id="g-next-question-btn" class="hidden action-btn">Next Question ➡️</button>
+            </div>
+            <div id="g-final-score-container" class="hidden">
+                <h2 id="g-score-text" style="font-size: 1.8rem; color: #27ae60;">0%</h2>
+                <button class="action-btn" onclick="window.location.href='../../index.html'">🌟 Finish Lesson & Return 🌟</button>
+            </div>
+            <div class="author-footer">Developed by Hisham Embaby</div>
+        </div>
+
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNF8mnf0ucVbAbuZojokGSKNnUvQNvoGk",
+            authDomain: "hisham-s-english-academy.firebaseapp.com",
+            projectId: "hisham-s-english-academy",
+            storageBucket: "hisham-s-english-academy.firebasestorage.app",
+            messagingSenderId: "766824698161",
+            appId: "1:766824698161:web:aeb8d7ab371912e7aee010"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUid = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUid = user.uid;
+                window.currentStudentName = user.displayName; // عشان يقرأ اسم الطالب صح
+                const welcomeMsg = document.getElementById('welcome-message');
+                if(welcomeMsg) welcomeMsg.innerText = `Welcome, ${user.displayName}! 👋`;
+            }
+        });
+
+        // دي الدالة اللي الاسكريبت هينادي عليها لما الطالب يخلص الدرس
+        window.markLessonCompleted = async function() {
+            if (!currentUid) return;
+            try {
+                const studentRef = doc(db, "students", currentUid);
+                // بنسجل إن الطالب ده خلص (dvd1-lesson1)
+                await updateDoc(studentRef, {
+                    completedLessons: arrayUnion("dvd1-lesson1") 
+                });
+                console.log("تم إرسال إشارة النجاح للبوابة بنجاح! ✅");
+            } catch (e) { console.error("Error saving progress:", e); }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #333;
+}
+
+#app-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.stage {
+    display: none;
+    padding: 40px 20px;
+    animation: fadeIn 0.5s;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.stage.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* اللوجو الخلفي - زودنا الشفافية جداً هنا عشان الزراير تبان بوضوح */
+.watermark-bg {
+    background-image: url('images/logo.png');
+    background-repeat: no-repeat;
+    background-position: center 75%;
+    background-size: 70%; 
+    position: relative;
+    z-index: 1;
+}
+.watermark-bg::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.85); /* 0.85 بتخلي اللوجو باهت جداً ومريح للعين */
+    z-index: -1;
+}
+
+.login-box {
+    margin-top: 50px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.5); 
+    backdrop-filter: blur(3px); 
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: inline-block;
+    width: 80%;
+    max-width: 400px;
+}
+
+.main-logo { width: 120px; margin-bottom: 10px; }
+.small-logo { width: 80px; margin-bottom: 10px; }
+
+.login-input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 2px solid #bdc3c7;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login-btn, .action-btn {
+    background-color: #bdc3c7;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    cursor: not-allowed;
+    transition: 0.3s;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+}
+
+.active-btn {
+    background-color: #27ae60 !important;
+    cursor: pointer !important;
+}
+.active-btn:hover { background-color: #2ecc71 !important; transform: scale(1.05); }
+
+.action-btn { background-color: #3498db; cursor: pointer; margin-top: 15px; }
+.action-btn:hover { background-color: #2980b9; transform: scale(1.05); }
+
+.menu-container { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
+.menu-btn {
+    background-color: white;
+    border: 2px solid #3498db;
+    color: #3498db;
+    padding: 15px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.menu-btn:hover { background-color: #3498db; color: white; transform: translateY(-3px); box-shadow: 0 5px 10px rgba(52,152,219,0.3); }
+
+.back-home-btn {
+    position: absolute; top: 15px; left: 15px;
+    background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #2c3e50;
+}
+
+video { width: 100%; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); outline: none; background: #000; }
+
+.flashcard-container { width: 300px; height: 350px; margin: 20px auto; perspective: 1000px; cursor: pointer; }
+.flashcard-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+.flashcard-inner.is-flipped { transform: rotateY(180deg); }
+.flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;}
+.flashcard-front img { max-width: 80%; max-height: 150px; object-fit: contain; border-radius: 10px; margin-bottom: 20px; }
+.flashcard-front #card-word { font-size: 1.8rem; font-weight: bold; color: #2c3e50; margin: 0; }
+.flashcard-back { background-color: #34495e; color: white; transform: rotateY(180deg); }
+#card-translation { font-size: 2rem; font-weight: bold; color: #f1c40f; margin-bottom: 20px;}
+.example-box { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; width: 100%; }
+#card-example-en { font-style: italic; margin-bottom: 10px; font-size: 1.1rem; }
+.click-hint { font-size: 0.8rem; opacity: 0.7; margin-top: auto; }
+
+.controls-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 20px; }
+#play-audio-btn { background-color: #9b59b6; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; }
+.navigation-buttons { display: flex; align-items: center; justify-content: center; gap: 15px; }
+.navigation-buttons button { background: none; border: 2px solid #2c3e50; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+#word-counter-text { margin: 0 10px; font-size: 1.2rem; }
+
+.counter-style { font-weight: bold; color: #7f8c8d; }
+#options-container, #sq-options-container, #g-options-container { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+#options-container button, #sq-options-container button, #g-options-container button { padding: 15px; font-size: 1.1rem; border: 2px solid #bdc3c7; background: white; border-radius: 8px; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif;}
+#options-container button:hover, #sq-options-container button:hover, #g-options-container button:hover { background-color: #ecf0f1; }
+button.success { background-color: #27ae60 !important; color: white; border-color: #27ae60 !important; }
+button.fail { background-color: #e74c3c !important; color: white; border-color: #e74c3c !important; }
+#feedback-text, #sq-feedback-text, #g-feedback-text { font-size: 1.3rem; font-weight: bold; height: 30px;}
+
+.conversation-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+#speaker-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid #3498db; }
+.speaker-name { color: #3498db; margin: 10px 0 5px; font-size: 1.3rem; }
+.english-line { font-size: 1.4rem; font-weight: bold; color: #2c3e50; }
+
+.character-buttons { display: flex; justify-content: center; gap: 20px; }
+.char-btn { display: flex; flex-direction: column; align-items: center; background: none; border: none; cursor: pointer; transition: 0.3s; }
+.char-btn img { width: 120px; height: 120px; border-radius: 50%; border: 5px solid #bdc3c7; margin-bottom: 10px; }
+.char-btn:hover img { border-color: #3498db; transform: scale(1.05); }
+.char-btn span { font-weight: bold; font-size: 1.1rem; color: #2c3e50; }
+
+.chat-box { height: 300px; overflow-y: auto; background: white; border-radius: 10px; padding: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
+.chat-bubble { padding: 10px 15px; border-radius: 15px; max-width: 80%; text-align: left; font-size: 1.1rem; }
+.bubble-app { background-color: #ecf0f1; align-self: flex-start; border-bottom-left-radius: 0; }
+.bubble-user { background-color: #d5f5e3; align-self: flex-end; border-bottom-right-radius: 0; border: 1px solid #2ecc71; }
+
+.mic-container { background: #fdfefe; border: 2px dashed #3498db; padding: 20px; border-radius: 15px; margin-bottom: 15px; }
+.your-turn { color: #e67e22; font-weight: bold; margin: 0 0 10px; }
+.line-to-say { font-size: 1.4rem; font-weight: bold; color: #2c3e50; margin-bottom: 15px; }
+.mic-btn { font-size: 3rem; background: none; border: none; cursor: pointer; transition: 0.3s; }
+.mic-btn.listening { transform: scale(1.2); filter: drop-shadow(0 0 10px #e74c3c); animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+.speech-result { margin-top: 15px; padding: 10px; border-radius: 8px; font-weight: bold; }
+.speech-result.success { background-color: #d5f5e3; color: #27ae60; }
+.speech-result.fail { background-color: #fadbd8; color: #c0392b; }
+
+.hidden { display: none !important; }
+
+.author-footer {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 0.8rem;
+    color: #95a5a6;
+    font-weight: bold;
+}
