@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Today - Lesson 5</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* =================== CSS STYLES =================== */
+        :root { --dark-blue: #0d47a1; --light-blue: #1976d2; --bg-color: #f0f4f8; --border-color: #b0bec5; --green-text: #27ae60; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        .main-card { 
+            background-color: #ffffff; 
+            width: 100%; max-width: 650px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); 
+            padding: 30px; 
+            position: relative; 
+            overflow: hidden; 
+            min-height: 500px; 
+            display: flex; 
+            flex-direction: column; 
+        }
+
+        /* اللوجو كخلفية ثابتة واحترافية - الشفافية 10% */
+        .main-card::before {
+            content: "";
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%; height: 85%;
+            background-image: url('assets/images/logo.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.10; 
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .content-wrapper { position: relative; z-index: 1; flex-grow: 1; display: flex; flex-direction: column; }
+
+        .app-screen { display: none; width: 100%; }
+        .app-screen.active { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .portal-logo-container { width: 90px; height: 90px; background-color: white; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; overflow: hidden; margin: 0 auto 15px auto; z-index: 2; }
+        .portal-logo-container img { width: 80%; height: auto; }
+
+        .login-title { color: var(--green-text); font-size: 36px; font-weight: 900; text-align: center; margin-bottom: 5px; }
+        .login-lesson-name { text-align: center; color: var(--dark-blue); font-size: 16px; font-weight: bold; margin-bottom: 25px; line-height: 1.4; padding: 0 10px; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-label { display: block; font-weight: bold; color: var(--dark-blue); margin-bottom: 8px; font-size: 15px; }
+        .login-input { width: 100%; padding: 12px 15px; border: 2px solid var(--light-blue); border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 16px; outline: none; background: white; }
+        .login-input:focus { border-color: var(--dark-blue); box-shadow: 0 0 5px rgba(13, 71, 161, 0.2); }
+        .btn-go { background-color: #bdc3c7; color: white; border: none; padding: 12px 40px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; display: block; margin: 30px auto 0; transition: 0.3s; font-family: 'Poppins', sans-serif; width: 120px; }
+        .btn-go.active-go { background-color: var(--light-blue); }
+        .btn-go.active-go:hover { background-color: var(--dark-blue); }
+        .error-msg { color: #e74c3c; font-size: 14px; text-align: center; font-weight: bold; display: none; margin-top: 15px; }
+
+        .section-title { color: var(--dark-blue); font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 5px; }
+        .lesson-title { color: var(--dark-blue); font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 25px; line-height: 1.4; }
+        .hint { text-align: center; color: #555; font-size: 14px; margin-bottom: 15px; font-weight: bold;}
+        
+        .btn-back { background: none; border: none; color: var(--light-blue); font-weight: bold; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; gap: 5px; font-size: 16px; }
+        .btn-action { background-color: var(--light-blue); color: white; border: none; padding: 15px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; margin-bottom: 10px; transition: 0.3s; font-family: 'Poppins', sans-serif;}
+        .btn-action:hover { background-color: var(--dark-blue); }
+
+        /* MENU LIST COLORS */
+        .menu-list { display: flex; flex-direction: column; gap: 12px; }
+        .menu-item { background: white; border: 2px solid var(--border-color); border-radius: 12px; padding: 15px 20px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.3s; text-align: left; position: relative; z-index: 2; }
+        .menu-item span { font-weight: bold; font-size: 16px; }
+        
+        .menu-item:nth-child(1) { border-color: #8e44ad; } .menu-item:nth-child(1) span { color: #8e44ad; } .menu-item:nth-child(1):hover { background-color: #f4ecf7; }
+        .menu-item:nth-child(2) { border-color: #e74c3c; } .menu-item:nth-child(2) span { color: #e74c3c; } .menu-item:nth-child(2):hover { background-color: #fdedec; }
+        .menu-item:nth-child(3) { border-color: #d35400; } .menu-item:nth-child(3) span { color: #d35400; } .menu-item:nth-child(3):hover { background-color: #fbeee6; }
+        .menu-item:nth-child(4) { border-color: #e67e22; } .menu-item:nth-child(4) span { color: #e67e22; } .menu-item:nth-child(4):hover { background-color: #fdf2e9; }
+        .menu-item:nth-child(5) { border-color: #27ae60; } .menu-item:nth-child(5) span { color: #27ae60; } .menu-item:nth-child(5):hover { background-color: #e9f7ef; }
+        .menu-item:nth-child(6) { border-color: #16a085; } .menu-item:nth-child(6) span { color: #16a085; } .menu-item:nth-child(6):hover { background-color: #e8f6f3; }
+        .menu-item:nth-child(7) { border-color: #2980b9; } .menu-item:nth-child(7) span { color: #2980b9; } .menu-item:nth-child(7):hover { background-color: #ebf5fb; }
+        .menu-item:nth-child(8) { border-color: #34495e; } .menu-item:nth-child(8) span { color: #34495e; } .menu-item:nth-child(8):hover { background-color: #ebedef; }
+        .menu-item:nth-child(9) { border-color: #8e44ad; } .menu-item:nth-child(9) span { color: #8e44ad; } .menu-item:nth-child(9):hover { background-color: #f4ecf7; }
+        .menu-item:nth-child(10) { border-color: #c0392b; } .menu-item:nth-child(10) span { color: #c0392b; } .menu-item:nth-child(10):hover { background-color: #f9ebea; }
+
+        .flashcard-box { width: 100%; height: 260px; perspective: 1000px; margin: 20px 0; cursor: pointer; }
+        .card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flashcard-box.flipped .card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; border-radius: 15px; border: 1px solid var(--border-color); background: white; top: 0; left: 0; }
+        .card-back { transform: rotateY(180deg); background-color: #f1f8ff; border: 2px solid var(--light-blue); }
+        
+        .fc-img { width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .fc-word { font-size: 28px; font-weight: bold; color: var(--dark-blue); }
+        .fc-meaning { font-size: 22px; color: var(--light-blue); font-weight: bold; }
+        .fc-def { font-size: 16px; color: #555; margin-top: 8px; font-weight: normal; }
+        .fc-example { font-size: 14px; color: #555; font-style: italic; margin-top: 10px; }
+
+        .nav-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .btn-nav { background: white; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; color: var(--dark-blue); font-family: 'Poppins', sans-serif;}
+        .btn-nav:hover { background: #f0f4f8; }
+        .counter-text { font-size: 18px; font-weight: bold; color: var(--dark-blue); }
+
+        .quiz-btn { background: white; border: 1px solid var(--light-blue); padding: 15px; border-radius: 12px; margin-bottom: 12px; width: 100%; cursor: pointer; font-weight: bold; font-size: 16px; color: #333; transition: 0.3s; font-family: 'Poppins', sans-serif; text-align: center;}
+        .quiz-btn:hover { background: var(--light-blue); color: white; border: 1px solid var(--light-blue); }
+        .quiz-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+        .result-box { display: none; text-align: center; padding: 30px; background: #e3f2fd; border: 3px solid var(--light-blue); border-radius: 15px; margin-top: 20px; }
+        .fraction-score { font-size: 22px; font-weight: bold; color: #555; margin-top: 10px; }
+
+        .dialogue-box { background: #f8f9fa; border: 1px solid var(--border-color); border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 15px; min-height: 140px; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2;}
+        .char-name { font-weight: bold; color: var(--light-blue); font-size: 18px; margin-bottom: 10px; text-transform: capitalize; }
+        .dial-text { font-size: 20px; font-weight: bold; color: #333; line-height: 1.4; }
+
+        .roleplay-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 30px; position: relative; z-index: 2;}
+        .role-btn { width: 45%; border: 1px solid var(--border-color); border-radius: 15px; padding: 20px 10px; text-align: center; cursor: pointer; background: white; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .role-btn:hover { border-color: var(--light-blue); background: #e3f2fd; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .role-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid var(--border-color); background-color: #f0f4f8; }
+        .role-name { font-weight: bold; font-size: 16px; color: var(--dark-blue); text-transform: capitalize;}
+
+        .turn-indicator { padding: 12px; border-radius: 10px; font-weight: bold; margin: 15px 0; text-align: center; font-size: 16px; position: relative; z-index: 2;}
+        .your-turn { background: #4caf50; color: white; }
+        .app-turn { background: var(--light-blue); color: white; }
+        
+        .playback-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; max-height: 350px; overflow-y: auto; }
+        .playback-item { background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; text-align: left; }
+
+        .lw-input { width: 100%; padding: 15px; font-size: 18px; text-align: center; border: 2px solid var(--border-color); border-radius: 10px; margin-bottom: 15px; font-family: 'Poppins', sans-serif; font-weight: bold; color: var(--dark-blue); position: relative; z-index: 2;}
+        .lw-input:focus { outline: none; border-color: var(--light-blue); }
+
+        .app-footer { text-align: right; margin-top: auto; padding-top: 25px; font-size: 12px; font-weight: bold; color: #95a5a6; position: relative; z-index: 2;}
+
+        /* إعدادات شاشة عرض الفيديوهات */
+        .iframe-container { position: relative; width: 100%; max-width: 500px; aspect-ratio: 16/9; margin: 0 auto 20px auto; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.2); background: #000; }
+        .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+    </style>
+</head>
+<body>
+    <div class="main-card">
+        
+        <div class="content-wrapper">
+
+            <div id="screen-menu" class="app-screen active">
+                <button style="background: #f8f9fa; border: 2px solid #e74c3c; color: #e74c3c; font-weight: bold; font-size: 16px; cursor: pointer; padding: 10px; border-radius: 10px; width: 95%; margin: 0 auto 15px auto; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.location.href='../../index.html?dvd=1'">🔙 Back to DVD 1 Lessons</button>
+
+                <div class="portal-logo-container" style="width: 70px; height: 70px;">
+                    <img src="assets/images/logo.png" alt="Logo" onerror="this.style.display='none'">
+                </div>
+                <h1 class="section-title">English Today</h1>
+                <p id="welcomeMsg" style="text-align:center; color:#e53935; font-weight:bold; margin-bottom:5px; font-size: 18px;">Welcome 👋</p>
+                <p class="lesson-title" id="ui-lesson-title-menu">Lesson 5: That's life! Hurry up!</p>
+                <div class="menu-list">
+                    <button class="menu-item" onclick="showScreen('screen-story-video')"><span>🎬 1. Watch Story</span></button>
+                    <button class="menu-item" onclick="startStoryQuiz()"><span>💬 2. Story Quiz</span></button>
+                    <button class="menu-item" onclick="showScreen('screen-flashcards')"><span>🃏 3. Difficult Words</span></button>
+                    <button class="menu-item" onclick="startWordsQuiz()"><span>🎯 4. Words Quiz</span></button>
+                    <button class="menu-item" onclick="startLearnLines()"><span>🗣️ 5. Learn The Lines</span></button>
+                    <button class="menu-item" onclick="startLwc()"><span>📝 6. Listen & Write (Story)</span></button>
+                    <button class="menu-item" onclick="startRoleplaySelect()"><span>🎭 7. Roleplay Mode</span></button>
+                    <button class="menu-item" onclick="showScreen('screen-grammar-video-1')"><span>📺 8. Grammar Video 1</span></button>
+                    <button class="menu-item" onclick="showScreen('screen-grammar-video-2')"><span>📺 9. Grammar Video 2</span></button>
+                    <button class="menu-item" onclick="startGrammarQuiz()"><span>✅ 10. Grammar Quiz</span></button>
+                </div>
+            </div>
+
+            <div id="screen-story-video" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Story</h1>
+                <div class="iframe-container" style="position: relative; z-index: 2;">
+                    <iframe src="https://rumble.com/embed/v77510y/?pub=4patlm" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                </div>
+                <button class="btn-action" onclick="startStoryQuiz()" style="background-color: #e67e22;">Next: Story Quiz 💬</button>
+            </div>
+
+            <div id="screen-story-quiz" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Story Quiz</h1>
+                <div id="story-quiz-area">
+                    <div class="dialogue-box"><p id="sqQuestionText" style="font-size: 20px; font-weight: bold; color: var(--dark-blue);"></p></div>
+                    <div id="sq-options" style="margin-top: 15px; position: relative; z-index: 2;"></div>
+                    <p id="sqProgress" style="text-align: center; margin-top: 15px; font-weight: bold; color: #555; position: relative; z-index: 2;"></p>
+                    <button id="sqNextBtn" class="btn-action" style="display:none; background:#4caf50; margin-top: 15px; position: relative; z-index: 2;" onclick="nextSqQuestion()">Next Question ➡️</button>
+                </div>
+                <div id="sq-result-area" class="result-box" style="position: relative; z-index: 2;">
+                    <h2 id="sqFeedbackMsg">Quiz Finished!</h2>
+                    <p id="sqScoreFraction" class="fraction-score"></p>
+                    <p id="sqFinalScore" style="font-size: 45px; font-weight: bold; margin: 5px 0 20px 0; color: var(--dark-blue);">0%</p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+            </div>
+
+            <div id="screen-flashcards" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Difficult Words</h1>
+                <div class="flashcard-box" id="fcBox" onclick="this.classList.toggle('flipped')" style="position: relative; z-index: 2;">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img id="fcImg" class="fc-img" src="" alt="Word Image" onerror="this.src='assets/images/logo.png';">
+                            <p class="fc-word" id="fcWordMain"></p>
+                        </div>
+                        <div class="card-back">
+                            <p class="fc-meaning" id="fcWordSub"></p>
+                            <p class="fc-def" id="fcWordDef" style="font-size: 16px; color: #555; margin-top: 8px;"></p>
+                            <p class="fc-example" id="fcWordEx"></p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-action" onclick="event.stopPropagation(); playWordAudio()" style="position: relative; z-index: 2;">🔊 Listen</button>
+                <audio id="wordAudio"></audio>
+                <div class="nav-controls" style="position: relative; z-index: 2;">
+                    <button class="btn-nav" onclick="prevCard()">Prev</button>
+                    <span class="counter-text" id="fcCounter"></span>
+                    <button class="btn-nav" onclick="nextCard()">Next</button>
+                </div>
+            </div>
+
+            <div id="screen-words-quiz" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Words Quiz</h1>
+                <div id="wq-question-area">
+                    <p class="hint">Listen carefully then choose</p>
+                    <button class="btn-action" onclick="playWqAudio()" style="position: relative; z-index: 2;">🔊 Listen to word</button>
+                    <div id="wq-options" style="margin-top: 15px; position: relative; z-index: 2;"></div>
+                    <p id="wqProgress" style="text-align: center; margin-top: 15px; font-weight: bold; color: #555; position: relative; z-index: 2;"></p>
+                    <button id="wqNextBtn" class="btn-action" style="display:none; background:#4caf50; margin-top: 15px; position: relative; z-index: 2;" onclick="nextWqQuestion()">Next Question ➡️</button>
+                </div>
+                <div id="wq-result-area" class="result-box" style="position: relative; z-index: 2;">
+                    <h2 id="wqFeedbackMsg">Quiz Finished!</h2>
+                    <p id="wqScoreFraction" class="fraction-score"></p>
+                    <p id="wqFinalScore" style="font-size: 45px; font-weight: bold; margin: 5px 0 20px 0; color: var(--dark-blue);">0%</p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+                <audio id="wqAudio"></audio>
+            </div>
+
+            <div id="screen-learn-lines" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Learn The Lines</h1>
+                <div class="dialogue-box">
+                    <p class="char-name" id="learnChar"></p>
+                    <p class="dial-text" id="learnText"></p>
+                </div>
+                <button class="btn-action" onclick="playLearnAudio()" style="position: relative; z-index: 2;">🔊 Listen</button>
+                <audio id="learnAudio"></audio>
+                <div class="nav-controls" style="position: relative; z-index: 2;">
+                    <button class="btn-nav" onclick="prevLearn()">Prev</button>
+                    <span class="counter-text" id="learnCounter"></span>
+                    <button class="btn-nav" onclick="nextLearn()">Next</button>
+                </div>
+            </div>
+
+            <div id="screen-listen-write-conv" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Listen & Write</h1>
+                <div class="dialogue-box" id="lwc-content-area">
+                    <button class="btn-action" onclick="playLwcAudio()">🔊 Listen to line</button>
+                    <audio id="lwcAudio"></audio>
+                    <input type="text" id="lwcInput" class="lw-input" placeholder="Type here...">
+                    <button class="btn-action" id="lwcCheckBtn" onclick="checkLwcAnswer()">✅ Check Answer</button>
+                    <p id="lwcFeedback" style="font-size: 18px; font-weight: bold; margin-top: 10px; display: none;"></p>
+                    <button class="btn-action" id="lwcNextBtn" onclick="nextLwcLine()" style="display:none; background:#4caf50; margin-top:15px;">Next Line</button>
+                </div>
+                <p id="lwcProgress" class="counter-text" style="text-align: center; margin-top: 15px; position: relative; z-index: 2;"></p>
+                <div id="lwc-result-area" class="result-box" style="position: relative; z-index: 2;">
+                    <h2 id="lwcFeedbackMsg">Practice Finished!</h2>
+                    <p id="lwcScoreFraction" class="fraction-score"></p>
+                    <p id="lwcFinalScore" style="font-size: 45px; font-weight: bold; margin: 15px 0 20px 0; color: var(--dark-blue);">0%</p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+            </div>
+
+            <div id="screen-roleplay-select" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Roleplay Mode</h1>
+                <p class="hint" style="margin-top: -5px; margin-bottom: 20px; position: relative; z-index: 2;">Choose Your Role</p>
+                <div class="roleplay-container" id="roleplay-buttons-area"></div>
+            </div>
+            
+            <div id="screen-roleplay-active" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-roleplay-select')">↩ Back to Roles</button>
+                <h1 class="section-title">Roleplay</h1>
+                
+                <div id="rp-content-area">
+                    <div class="dialogue-box">
+                        <p class="char-name" id="rpChar"></p>
+                        <p class="dial-text" id="rpText"></p>
+                    </div>
+                    <div id="rpIndicator" class="turn-indicator"></div>
+                    <div id="micArea" style="display:none; text-align:center; position: relative; z-index: 2;">
+                        <button id="btnRecord" class="btn-action" style="background:#4caf50;" onclick="toggleRecording()">🎙️ Record</button>
+                        <audio id="userAudioPlayback" controls style="margin-top: 10px; width: 100%; display: none; border-radius: 10px;"></audio>
+                    </div>
+                    <button class="btn-action" style="margin-top:20px; position: relative; z-index: 2;" onclick="nextRp()">Next Step</button>
+                    <audio id="rpAudio"></audio>
+                </div>
+
+                <div id="rp-result-area" class="result-box" style="position: relative; z-index: 2;">
+                    <h2>Roleplay Completed!</h2>
+                    
+                    <div id="rpPlaybackArea" style="margin: 20px 0; background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
+                        <p id="rpResultCurrentText" style="font-size: 16px; font-weight: bold; color: var(--dark-blue); margin-bottom: 15px; min-height: 40px;">Listen to your performance!</p>
+                        <button id="btnPlayFull" class="btn-action" style="background:#e67e22;" onclick="playFullRoleplay()">▶️ Listen to Full Conversation</button>
+                        <audio id="rpAudioPlaybackFull" style="display:none;"></audio>
+                    </div>
+
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+            </div>
+
+            <div id="screen-grammar-video-1" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Grammar Video 1</h1>
+                <div class="iframe-container" style="position: relative; z-index: 2;">
+                    <iframe src="https://rumble.com/embed/v7750k6/?pub=4patlm" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                </div>
+                <button class="btn-action" onclick="showScreen('screen-grammar-video-2')" style="margin-top:15px; background-color: #e67e22; position: relative; z-index: 2;">Next: Grammar Video 2</button>
+            </div>
+            
+            <div id="screen-grammar-video-2" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Grammar Video 2</h1>
+                <div class="iframe-container" style="position: relative; z-index: 2;">
+                    <iframe src="https://rumble.com/embed/v7750um/?pub=4patlm" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                </div>
+                <button class="btn-action" onclick="startGrammarQuiz()" style="margin-top:15px; background-color: #e67e22; position: relative; z-index: 2;">Next: Grammar Quiz ✅</button>
+            </div>
+            
+            <div id="screen-grammar-quiz" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Grammar Quiz</h1>
+                <div id="gq-question-area">
+                    <div class="dialogue-box"><p id="gqQuestionText" style="font-size: 18px; font-weight: bold; color: var(--dark-blue);"></p></div>
+                    <div id="gq-options" style="position: relative; z-index: 2;"></div>
+                    <p id="gqProgress" style="text-align: center; margin-top: 15px; font-weight: bold; color: #555; position: relative; z-index: 2;"></p>
+                    <button id="gqNextBtn" class="btn-action" style="display:none; background:#4caf50; position: relative; z-index: 2;" onclick="nextGqQuestion()">Next Question ➡️</button>
+                </div>
+                <div id="gq-result-area" class="result-box" style="position: relative; z-index: 2;">
+                    <h2 id="gqFeedbackMsg">Quiz Finished!</h2>
+                    <p id="gqScoreFraction" class="fraction-score"></p>
+                    <p id="gqFinalScore" style="font-size: 45px; font-weight: bold; color: var(--dark-blue);">0%</p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                    <button class="btn-action" style="background-color: #e74c3c; margin-top: 10px;" onclick="window.location.href='../../index.html?dvd=1'">🔙 Back to DVD 1 Lessons</button>
+                </div>
+            </div>
+
+            <audio id="correctAudio" src="assets/audio/correct.mp3"></audio>
+            <audio id="wrongAudio" src="assets/audio/wrong.mp3"></audio>
+            <div class="app-footer">Developed by Hisham Embaby</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNF8mnf0ucVbAbuZojokGSKNnUvQNvoGk",
+            authDomain: "hisham-s-english-academy.firebaseapp.com",
+            projectId: "hisham-s-english-academy",
+            storageBucket: "hisham-s-english-academy.firebasestorage.app",
+            messagingSenderId: "766824698161",
+            appId: "1:766824698161:web:aeb8d7ab371912e7aee010"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUid = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUid = user.uid;
+                window.currentStudentName = user.displayName;
+                const welcomeMsg = document.getElementById('welcomeMsg');
+                if(welcomeMsg) welcomeMsg.innerText = `Welcome, ${user.displayName}! 👋`;
+            }
+        });
+
+        window.markLessonCompleted = async function() {
+            if (!currentUid) return;
+            try {
+                const studentRef = doc(db, "students", currentUid);
+                // بنسجل إن الطالب ده خلص (dvd1-lesson5)
+                await updateDoc(studentRef, {
+                    completedLessons: arrayUnion("dvd1-lesson5") 
+                });
+                console.log("تم إرسال إشارة النجاح للبوابة بنجاح! ✅");
+            } catch (e) { console.error("Error saving progress:", e); }
+        };
+    </script>
+
+    <script>
+        // ======================== DATA SECTION ==========================
+        const LESSON_TITLE = "Lesson 5: That's life! Hurry up!"; 
+
+        // 1. FLASHCARDS
+        const wordsData = [
+            { main: "Stress", sub: "توتر / ضغط", def: "Feeling worried or nervous", img: "assets/images/01-stress.jpg", audio: "assets/audio/01-stress.mp3", ex: "I feel a lot of stress." },
+            { main: "Appointment", sub: "موعد", def: "A meeting at a certain time", img: "assets/images/02-appointment.jpg", audio: "assets/audio/02-appointment.mp3", ex: "I have an appointment at 8." },
+            { main: "Magazines", sub: "مجلات", def: "Thin books with pictures and news", img: "assets/images/03-magazines.jpg", audio: "assets/audio/03-magazines.mp3", ex: "She reads magazines." },
+            { main: "Behind", sub: "خلف", def: "At the back of something", img: "assets/images/04-behind.jpg", audio: "assets/audio/04-behind.mp3", ex: "The cat is behind the sofa." },
+            { main: "Next to", sub: "بجوار / بجانب", def: "Beside someone or something", img: "assets/images/05-next-to.jpg", audio: "assets/audio/05-next-to.mp3", ex: "He sits next to me." },
+            { main: "Sweater", sub: "سترة صوفية", def: "A warm piece of clothing", img: "assets/images/06-sweater.jpg", audio: "assets/audio/06-sweater.mp3", ex: "It's cold, wear a sweater." },
+            { main: "Calm down", sub: "اهدأ", def: "To become quiet and relaxed", img: "assets/images/07-calm-down.jpg", audio: "assets/audio/07-calm-down.mp3", ex: "Please, calm down." },
+            { main: "Life-saver", sub: "منقذ", def: "Someone who helps you", img: "assets/images/08-life-saver.jpg", audio: "assets/audio/08-life-saver.mp3", ex: "You are a life-saver!" },
+            { main: "Hurry up", sub: "أسرع", def: "To do something more quickly", img: "assets/images/09-hurry-up.jpg", audio: "assets/audio/09-hurry-up.mp3", ex: "Hurry up, we are late." },
+            { main: "Half past", sub: "والنصف", def: "30 minutes after the hour", img: "assets/images/10-half-past.jpg", audio: "assets/audio/10-half-past.mp3", ex: "It is half past two." },
+            { main: "Train", sub: "قطار", def: "A big vehicle on tracks", img: "assets/images/11-train.jpg", audio: "assets/audio/11-train.mp3", ex: "The train leaves soon." },
+            { main: "Pasta", sub: "مكرونة", def: "An Italian food", img: "assets/images/12-pasta.jpg", audio: "assets/audio/12-pasta.mp3", ex: "I love eating pasta." }
+        ];
+
+        // 2. STORY QUIZ
+        const storyQuizData = [
+            { q: "What can't Anne find?", opts: ["Her keys", "Her mobile phone", "Her watch"], ans: "Her watch" },
+            { q: "What does Jack have to do at 8 o'clock?", opts: ["Catch the train", "Meet some clients", "Go to the doctor's"], ans: "Catch the train" },
+            { q: "Jack's keys are under some newspapers.", opts: ["True", "False"], ans: "False" },
+            { q: "Where is Jack's sweater?", opts: ["On the chair", "He's wearing it", "On the floor"], ans: "He's wearing it" }
+        ];
+
+        // 3. STORY TRANSCRIPT
+        const conv1Data = [
+            { char: "Anne", text: "Good morning, Alice. How are you?", audio: "assets/sentences/c1_1_anne.mp3", img: "assets/images/anne.jpg" },
+            { char: "Alice", text: "Hi, Anne. Good morning... I'm fine, and you?", audio: "assets/sentences/c1_2_alice.mp3", img: "assets/images/alice.jpg" },
+            { char: "Anne", text: "Fine, thanks.", audio: "assets/sentences/c1_3_anne.mp3", img: "assets/images/anne.jpg" },
+            { char: "Anne", text: "Excuse me, where's my watch?", audio: "assets/sentences/c1_4_anne.mp3", img: "assets/images/anne.jpg" },
+            { char: "Alice", text: "I don't know, isn't it under the magazines?", audio: "assets/sentences/c1_5_alice.mp3", img: "assets/images/alice.jpg" },
+            { char: "Anne", text: "No, it isn't.", audio: "assets/sentences/c1_6_anne.mp3", img: "assets/images/anne.jpg" },
+            { char: "Alice", text: "Are you sure?", audio: "assets/sentences/c1_7_alice.mp3", img: "assets/images/alice.jpg" },
+            { char: "Anne", text: "Yes, I'm sure! It's not under the magazines... and... and I'm late! I've an appointment at eight o'clock!", audio: "assets/sentences/c1_8_anne.mp3", img: "assets/images/anne.jpg" },
+            { char: "Alice", text: "Maybe it's here on the table...", audio: "assets/sentences/c1_9_alice.mp3", img: "assets/images/alice.jpg" },
+            { char: "Alice", text: "Hmmm, no, the watch isn't here. Behind the apples, next to the pasta?", audio: "assets/sentences/c1_10_alice.mp3", img: "assets/images/alice.jpg" },
+            { char: "Anne", text: "Ah, there it is! Thanks, Alice.", audio: "assets/sentences/c1_11_anne.mp3", img: "assets/images/anne.jpg" },
+            { char: "Alice", text: "You're welcome, Anne. Bye!", audio: "assets/sentences/c1_12_alice.mp3", img: "assets/images/alice.jpg" },
+            { char: "Jack", text: "Oh no, it's late. Alice, what time is it?", audio: "assets/sentences/c1_13_jack.mp3", img: "assets/images/jack.jpg" },
+            { char: "Alice", text: "Just a moment... It's half past seven.", audio: "assets/sentences/c1_14_alice.mp3", img: "assets/images/alice.jpg" },
+            { char: "Jack", text: "Half past seven? My train is at eight o'clock!", audio: "assets/sentences/c1_15_jack.mp3", img: "assets/images/jack.jpg" },
+            { char: "Alice", text: "Hurry up, Jack! You're late!", audio: "assets/sentences/c1_16_alice.mp3", img: "assets/images/alice.jpg" },
+            { char: "Jack", text: "Okay, okay... Where are my keys?", audio: "assets/sentences/c1_17_jack.mp3", img: "assets/images/jack.jpg" },
+            { char: "Alice", text: "They're here, on the table.", audio: "assets/sentences/c1_18_alice.mp3", img: "assets/images/alice.jpg" },
+            { char: "Jack", text: "Thanks Alice. Now, another problem: where's my sweater?", audio: "assets/sentences/c1_19_jack.mp3", img: "assets/images/jack.jpg" },
+            { char: "Alice", text: "Maybe it's on the chair!?", audio: "assets/sentences/c1_20_alice.mp3", img: "assets/images/alice.jpg" },
+            { char: "Jack", text: "No, it isn't. Where is it?", audio: "assets/sentences/c1_21_jack.mp3", img: "assets/images/jack.jpg" },
+            { char: "Alice", text: "Calm down Jack... you're wearing it!", audio: "assets/sentences/c1_22_alice.mp3", img: "assets/images/alice.jpg" },
+            { char: "Jack", text: "Oh! Thanks, Alice, you're a life-saver!", audio: "assets/sentences/c1_23_jack.mp3", img: "assets/images/jack.jpg" },
+            { char: "Alice", text: "Hurry up, go, go, go!", audio: "assets/sentences/c1_24_alice.mp3", img: "assets/images/alice.jpg" },
+            { char: "Alice", text: "Ah... Too much stress... I must go back to bed again.", audio: "assets/sentences/c1_25_alice.mp3", img: "assets/images/alice.jpg" }
+        ];
+
+        // 4. GRAMMAR QUIZ
+        const grammarQuizData = [
+             { q: "....... is your favorite person?", opts: ["What", "Who", "Where"], ans: "Who" },
+             { q: "....... time is it?", opts: ["When", "What", "How"], ans: "What" },
+             { q: "....... is my sweater?", opts: ["Where", "Who", "Why"], ans: "Where" },
+             { q: "....... are we here? - To learn English.", opts: ["Which", "When", "Why"], ans: "Why" },
+             { q: "....... are you? - I'm fine, thanks.", opts: ["How", "What", "Who"], ans: "How" },
+             { q: "Anne's watch was ....... the magazines.", opts: ["under", "inside", "between"], ans: "under" },
+             { q: "Mr. Monkey comes ....... the box.", opts: ["out of", "under", "next to"], ans: "out of" },
+             { q: "The monkey is ....... the box and the computer.", opts: ["in front of", "through", "between"], ans: "between" },
+             { q: "He goes ....... the box.", opts: ["on", "through", "near"], ans: "through" },
+             { q: "Mr. Monkey is not far, he is ....... the box.", opts: ["near", "out of", "through"], ans: "near" }
+        ];
+
+        // ================= APP LOGIC =================
+        let currentDialogue = [];
+        
+        // دالة تحديد رسالة التشجيع بناءً على النسبة
+        function getFeedbackMsg(score, total) {
+            let percentage = (score / total) * 100;
+            if (percentage <= 50) return "Keep practicing! 💪";
+            if (percentage <= 75) return "Almost there! 👍";
+            return "Good job! 🌟";
+        }
+
+        function validateLogin() { let code = document.getElementById('classCode').value.trim(); let btn = document.getElementById('btnGo'); if(code.length > 0) btn.classList.add('active-go'); else btn.classList.remove('active-go'); }
+        function checkLogin() { let code = document.getElementById('classCode').value.trim(); let name = document.getElementById('studentName').value.trim(); if(code === "1") { document.getElementById('loginError').style.display = 'none'; document.getElementById('welcomeMsg').innerText = `Welcome, ${name !== "" ? name : "Student"}! 👋`; showScreen('screen-menu'); } else { document.getElementById('loginError').style.display = 'block'; } }
+        function showScreen(id) { document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('audio, video').forEach(m => { m.pause(); m.currentTime = 0; }); document.querySelectorAll('iframe').forEach(iframe => { let currentSrc = iframe.src; iframe.src = currentSrc; }); }
+        
+        function playCorrect() { let s = document.getElementById('correctAudio'); s.play().catch(e=>{}); }
+        function playWrong() { let s = document.getElementById('wrongAudio'); s.play().catch(e=>{}); }
+
+        function loadQuiz(data, areaId, nextBtnId, progressId, questionTextId, scoreObj, idxObj, finishCallback) {
+            let area = document.getElementById(areaId); area.innerHTML = '';
+            document.getElementById(nextBtnId).style.display = 'none';
+            let qData = data[idxObj.val];
+            document.getElementById(questionTextId).innerText = qData.q;
+            qData.opts.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'quiz-btn'; btn.innerText = opt;
+                btn.onclick = () => {
+                    document.querySelectorAll(`#${areaId} .quiz-btn`).forEach(b => b.disabled = true);
+                    if(opt === qData.ans) { scoreObj.val++; btn.style.background = '#4caf50'; btn.style.color='white'; playCorrect(); }
+                    else { btn.style.background = '#f44336'; btn.style.color='white'; playWrong(); document.querySelectorAll(`#${areaId} .quiz-btn`).forEach(b => { if(b.innerText === qData.ans) b.style.background = '#4caf50'; b.style.color='white'; }); }
+                    document.getElementById(nextBtnId).style.display = 'block';
+                };
+                area.appendChild(btn);
+            });
+            document.getElementById(progressId).innerText = `Question: ${idxObj.val + 1} / ${data.length}`;
+        }
+
+        // STORY QUIZ
+        let sqIdx = {val:0}, sqScore = {val:0};
+        function startStoryQuiz() { sqIdx.val=0; sqScore.val=0; document.getElementById('story-quiz-area').style.display='block'; document.getElementById('sq-result-area').style.display='none'; showScreen('screen-story-quiz'); loadSq(); }
+        function loadSq() { loadQuiz(storyQuizData, 'sq-options', 'sqNextBtn', 'sqProgress', 'sqQuestionText', sqScore, sqIdx); }
+        function nextSqQuestion() { sqIdx.val++; if(sqIdx.val < storyQuizData.length) loadSq(); else finishSq(); }
+        function finishSq() { 
+            document.getElementById('story-quiz-area').style.display='none'; 
+            document.getElementById('sq-result-area').style.display='block'; 
+            document.getElementById('sqScoreFraction').innerText = `Correct: ${sqScore.val} / ${storyQuizData.length}`; 
+            document.getElementById('sqFinalScore').innerText = Math.round((sqScore.val/storyQuizData.length)*100) + '%';
+            document.getElementById('sqFeedbackMsg').innerText = getFeedbackMsg(sqScore.val, storyQuizData.length);
+        }
+
+        // FLASHCARDS
+        let curW = 0;
+        function updateCard() { let w = wordsData[curW]; document.getElementById('fcWordMain').innerText = w.main; document.getElementById('fcWordSub').innerText = w.sub; document.getElementById('fcWordDef').innerText = w.def; document.getElementById('fcWordEx').innerText = `"${w.ex}"`; document.getElementById('fcImg').src = w.img; document.getElementById('wordAudio').src = w.audio; document.getElementById('fcCounter').innerText = `${curW + 1} / ${wordsData.length}`; document.getElementById('fcBox').classList.remove('flipped'); }
+        function nextCard() { if(curW < wordsData.length - 1) { curW++; updateCard(); } }
+        function prevCard() { if(curW > 0) { curW--; updateCard(); } }
+        function playWordAudio() { document.getElementById('wordAudio').play().catch(e=>console.log("Audio Error:", e)); }
+        updateCard();
+
+        // WORDS QUIZ
+        let wqIdx = {val:0}, wqScore = {val:0};
+        function startWordsQuiz() { wqIdx.val=0; wqScore.val=0; document.getElementById('wq-question-area').style.display='block'; document.getElementById('wq-result-area').style.display='none'; showScreen('screen-words-quiz'); loadWq(); }
+        function playWqAudio() { document.getElementById('wqAudio').play().catch(e=>console.log("Audio Error:", e)); }
+        function loadWq() {
+            let area = document.getElementById('wq-options'); area.innerHTML = ''; document.getElementById('wqNextBtn').style.display = 'none';
+            let correct = wordsData[wqIdx.val]; document.getElementById('wqAudio').src = correct.audio;
+            let options = [correct.main, ...wordsData.filter(w=>w.main!==correct.main).sort(()=>.5-Math.random()).slice(0,2).map(w=>w.main)].sort(()=>.5-Math.random());
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'quiz-btn'; btn.innerText = opt;
+                btn.onclick = () => {
+                    document.querySelectorAll('#wq-options .quiz-btn').forEach(b => b.disabled = true);
+                    if(opt === correct.main) { 
+                        wqScore.val++; 
+                        btn.style.background = '#4caf50'; btn.style.color = 'white'; 
+                        playCorrect(); 
+                    } else { 
+                        btn.style.background = '#f44336'; btn.style.color = 'white'; 
+                        playWrong(); 
+                        document.querySelectorAll('#wq-options .quiz-btn').forEach(b => {
+                            if(b.innerText === correct.main) { b.style.background = '#4caf50'; b.style.color = 'white'; }
+                        });
+                    }
+                    document.getElementById('wqNextBtn').style.display = 'block';
+                };
+                area.appendChild(btn);
+            });
+            document.getElementById('wqProgress').innerText = `Question: ${wqIdx.val + 1} / ${wordsData.length}`;
+        }
+        function nextWqQuestion() { 
+            wqIdx.val++; 
+            if(wqIdx.val < wordsData.length) {
+                loadWq(); 
+            } else { 
+                document.getElementById('wq-question-area').style.display='none'; 
+                document.getElementById('wq-result-area').style.display='block'; 
+                document.getElementById('wqScoreFraction').innerText = `Correct: ${wqScore.val} / ${wordsData.length}`; 
+                document.getElementById('wqFinalScore').innerText = Math.round((wqScore.val/wordsData.length)*100) + '%';
+                document.getElementById('wqFeedbackMsg').innerText = getFeedbackMsg(wqScore.val, wordsData.length);
+            } 
+        }
+
+        // LEARN LINES
+        let curL = 0;
+        function startLearnLines() { currentDialogue = conv1Data; curL = 0; showScreen('screen-learn-lines'); updateLearn(); }
+        function updateLearn() { document.getElementById('learnChar').innerText = currentDialogue[curL].char; document.getElementById('learnText').innerText = currentDialogue[curL].text; document.getElementById('learnCounter').innerText = `${curL + 1} / ${currentDialogue.length}`; document.getElementById('learnAudio').src = currentDialogue[curL].audio; }
+        function nextLearn() { if(curL < currentDialogue.length - 1) { curL++; updateLearn(); } }
+        function prevLearn() { if(curL > 0) { curL--; updateLearn(); } }
+        function playLearnAudio() { document.getElementById('learnAudio').play().catch(e=>console.log("Audio Error:", e)); }
+
+        // LISTEN & WRITE
+        let lwcIdx = 0, lwcScore = 0;
+        function startLwc() { currentDialogue = conv1Data; lwcIdx = 0; lwcScore = 0; document.getElementById('lwc-content-area').style.display = 'block'; document.getElementById('lwc-result-area').style.display = 'none'; showScreen('screen-listen-write-conv'); loadLwc(); }
+        function loadLwc() { document.getElementById('lwcAudio').src = currentDialogue[lwcIdx].audio; document.getElementById('lwcInput').value = ''; document.getElementById('lwcFeedback').style.display = 'none'; document.getElementById('lwcNextBtn').style.display = 'none'; document.getElementById('lwcProgress').innerText = `${lwcIdx + 1} / ${currentDialogue.length}`; }
+        function playLwcAudio() { document.getElementById('lwcAudio').play().catch(e=>console.log("Audio Error:", e)); }
+        
+        function checkLwcAnswer() {
+            let rawInput = document.getElementById('lwcInput').value;
+            let rawCorrect = currentDialogue[lwcIdx].text;
+            
+            let cleanStr = (s) => s.toLowerCase().replace(/hmmm+/g, '').replace(/hmm+/g, '').replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+            
+            let input = cleanStr(rawInput);
+            let correct = cleanStr(rawCorrect);
+            
+            let fb = document.getElementById('lwcFeedback'); fb.style.display = 'block';
+            if(input === correct) { lwcScore++; fb.innerText = "Excellent! 👏"; fb.style.color="#4caf50"; playCorrect(); }
+            else { fb.innerHTML = `Wrong ❌<br><small>Correct: ${rawCorrect}</small>`; fb.style.color="#f44336"; playWrong(); }
+            document.getElementById('lwcNextBtn').style.display = 'block';
+        }
+        function nextLwcLine() { 
+            lwcIdx++; 
+            if(lwcIdx < currentDialogue.length) {
+                loadLwc(); 
+            } else { 
+                document.getElementById('lwc-content-area').style.display='none'; 
+                document.getElementById('lwc-result-area').style.display='block'; 
+                document.getElementById('lwcScoreFraction').innerText=`Correct: ${lwcScore} / ${currentDialogue.length}`; 
+                document.getElementById('lwcFinalScore').innerText = Math.round((lwcScore/currentDialogue.length)*100) + '%';
+                document.getElementById('lwcFeedbackMsg').innerText = getFeedbackMsg(lwcScore, currentDialogue.length);
+            } 
+        }
+
+        // ROLEPLAY
+        let userRole = "", curR = 0;
+        let mediaRecorder; let audioChunks = []; let isRecording = false;
+        let userRecordings = {}; 
+        let playbackIndex = 0; let isPlayingFull = false;
+
+        function startRoleplaySelect() {
+            currentDialogue = conv1Data; let chars = [...new Set(currentDialogue.map(d => d.char))];
+            let area = document.getElementById('roleplay-buttons-area'); area.innerHTML = '';
+            chars.forEach(char => {
+                let btn = document.createElement('div'); btn.className = 'role-btn'; btn.onclick = () => startRoleplay(char);
+                btn.innerHTML = `<img src="${currentDialogue.find(d=>d.char===char).img}" class="role-avatar"><div class="role-name">${char}</div>`;
+                area.appendChild(btn);
+            });
+            showScreen('screen-roleplay-select');
+        }
+
+        function startRoleplay(r) { 
+            userRole = r; 
+            curR = 0; 
+            userRecordings = {}; 
+            document.getElementById('rp-result-area').style.display = 'none'; 
+            document.getElementById('rp-content-area').style.display = 'block'; 
+            showScreen('screen-roleplay-active'); 
+            nextRp(); 
+        }
+
+        function nextRp() {
+            if(curR >= currentDialogue.length) { 
+                document.getElementById('rp-content-area').style.display = 'none'; 
+                document.getElementById('rp-result-area').style.display = 'block'; 
+                document.getElementById('rpResultCurrentText').innerText = "Listen to your performance!";
+                return; 
+            }
+            let d = currentDialogue[curR]; 
+            document.getElementById('rpChar').innerText = d.char; 
+            document.getElementById('rpText').innerText = d.text;
+            let ind = document.getElementById('rpIndicator');
+            
+            let btnRec = document.getElementById('btnRecord');
+            let playback = document.getElementById('userAudioPlayback');
+            playback.style.display = 'none';
+            btnRec.innerText = "🎙️ Record";
+            btnRec.style.background = "#4caf50";
+            isRecording = false;
+
+            if(d.char === userRole) { 
+                ind.innerText = "YOUR TURN 🎤"; ind.className = "turn-indicator your-turn"; 
+                document.getElementById('micArea').style.display = 'block'; 
+            }
+            else { 
+                ind.innerText = "LISTEN 🔊"; ind.className = "turn-indicator app-turn"; 
+                document.getElementById('micArea').style.display = 'none'; 
+                document.getElementById('rpAudio').src = d.audio; 
+                document.getElementById('rpAudio').play().catch(e=>console.log("Audio Error:", e)); 
+            }
+            curR++;
+        }
+
+        async function toggleRecording() {
+            let btn = document.getElementById('btnRecord');
+            let playback = document.getElementById('userAudioPlayback');
+            let lineIndex = curR - 1;
+
+            if (!isRecording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ 
+                        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } 
+                    });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = event => { audioChunks.push(event.data); };
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        playback.src = audioUrl;
+                        playback.style.display = 'block';
+                        userRecordings[lineIndex] = audioUrl; 
+                    };
+
+                    mediaRecorder.start();
+                    isRecording = true;
+                    btn.innerText = "🛑 Stop Recording";
+                    btn.style.background = "#e74c3c";
+                    playback.style.display = 'none';
+                } catch (err) {
+                    alert("Please allow microphone access in your browser!");
+                    console.error("Mic error:", err);
+                }
+            } else {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                isRecording = false;
+                btn.innerText = "🎙️ Record Again";
+                btn.style.background = "#4caf50";
+            }
+        }
+
+        function playFullRoleplay() {
+            playbackIndex = 0; isPlayingFull = true;
+            document.getElementById('btnPlayFull').innerText = "⏹ Stop Playback";
+            document.getElementById('btnPlayFull').onclick = stopFullRoleplay;
+            playNextFullRpLine();
+        }
+        
+        function stopFullRoleplay() {
+            isPlayingFull = false;
+            let audio = document.getElementById('rpAudioPlaybackFull'); audio.pause();
+            document.getElementById('btnPlayFull').innerText = "▶️ Listen to Full Conversation";
+            document.getElementById('btnPlayFull').onclick = playFullRoleplay;
+            document.getElementById('rpResultCurrentText').innerText = "Listen to your performance!";
+        }
+
+        function playNextFullRpLine() {
+            if (!isPlayingFull) return;
+            if (playbackIndex >= currentDialogue.length) { stopFullRoleplay(); return; }
+            
+            let d = currentDialogue[playbackIndex];
+            document.getElementById('rpResultCurrentText').innerText = `${d.char}: ${d.text}`;
+
+            let audioSrc = d.audio; 
+            if (d.char === userRole && userRecordings[playbackIndex]) { audioSrc = userRecordings[playbackIndex]; }
+            
+            let audio = document.getElementById('rpAudioPlaybackFull');
+            audio.src = audioSrc;
+            audio.onended = () => { playbackIndex++; playNextFullRpLine(); };
+            audio.play().catch(e => { console.log("Audio Error:", e); playbackIndex++; playNextFullRpLine(); });
+        }
+
+        // GRAMMAR QUIZ
+        let gqIdx = {val:0}, gqScore = {val:0};
+        function startGrammarQuiz() { gqIdx.val=0; gqScore.val=0; document.getElementById('gq-question-area').style.display='block'; document.getElementById('gq-result-area').style.display='none'; showScreen('screen-grammar-quiz'); loadGq(); }
+        function loadGq() { loadQuiz(grammarQuizData, 'gq-options', 'gqNextBtn', 'gqProgress', 'gqQuestionText', gqScore, gqIdx); }
+        
+        // 🔥 التعديل هنا: إرسال إشارة النجاح للبوابة عند إنهاء الجرامر كويز 🔥
+        function nextGqQuestion() { 
+            gqIdx.val++; 
+            if(gqIdx.val < grammarQuizData.length) {
+                loadGq(); 
+            } else { 
+                document.getElementById('gq-question-area').style.display='none'; 
+                document.getElementById('gq-result-area').style.display='block'; 
+                document.getElementById('gqScoreFraction').innerText = `Correct: ${gqScore.val} / ${grammarQuizData.length}`; 
+                document.getElementById('gqFinalScore').innerText = Math.round((gqScore.val/grammarQuizData.length)*100) + '%';
+                document.getElementById('gqFeedbackMsg').innerText = getFeedbackMsg(gqScore.val, grammarQuizData.length);
+                
+                // سطر إرسال النجاح للفايربيز
+                if(window.markLessonCompleted) window.markLessonCompleted();
+            } 
+        }
+
+    </script>
+</body>
+</html>
