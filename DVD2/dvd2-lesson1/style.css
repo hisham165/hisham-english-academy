@@ -1,0 +1,88 @@
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #27ae60; color: #2c3e50; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; direction: ltr; transition: background-color 0.5s;}
+#app-container { background-color: #f4f7f6; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 95%; max-width: 550px; text-align: center; position: relative; transition: 0.3s; z-index: 1; overflow: hidden;}
+
+/* اللوجو */
+.main-logo { width: 110px; height: 110px; border-radius: 20px; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin: 0 auto 15px auto; display: block; background-color: white; padding: 5px; }
+
+/* 🚨 تم تعديل شفافية العلامة المائية لـ 14% (0.14) 🚨 */
+.watermark-bg { position: relative; z-index: 1; }
+.watermark-bg::before {
+    content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 350px; height: 350px; background-image: url('images/logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center;
+    opacity: 0.14; mix-blend-mode: multiply; z-index: -1; pointer-events: none;
+}
+
+.login-box, #quiz-content, .flashcard-container { position: relative; z-index: 2; }
+
+h1 { color: #0d47a1; margin-bottom: 20px; font-size: 1.8rem; padding-top: 45px; }
+#home-stage h1 { padding-top: 0; color: #27ae60; }
+
+h2 { color: #34495e; font-size: 1.4rem; margin-bottom: 20px;}
+.stage { display: none; }
+.stage.active { display: block; animation: fadeIn 0.4s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px);} to { opacity: 1; transform: translateY(0);} }
+
+.login-box { padding: 10px; }
+.login-input { width: 100%; padding: 15px; margin-top: 5px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 1.1rem; box-sizing: border-box; transition: 0.3s; background: white; }
+.login-input:focus { border-color: #27ae60; outline: none; }
+.login-btn { background-color: #bdc3c7; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1.2rem; font-weight: bold; width: 100%; cursor: not-allowed; transition: 0.3s; margin-top: 15px; }
+.login-btn.active-btn { background-color: #27ae60; cursor: pointer; }
+.login-btn.active-btn:hover { background-color: #2196f3; }
+
+.menu-grid { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+.back-home-btn { position: absolute; top: 15px; left: 15px; background: #ecf0f1; color: #3498db; border: none; padding: 8px 15px; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: bold; z-index: 10;}
+.back-home-btn:hover { background: #bdc3c7; color: #2980b9; }
+
+video { width: 100%; border-radius: 10px; margin-bottom: 20px; border: 2px solid #ddd; background: black;}
+
+.flashcard-container { background-color: transparent; width: 100%; height: 320px; perspective: 1000px; margin-bottom: 20px; cursor: pointer; }
+.flashcard-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+.flashcard-inner.is-flipped { transform: rotateY(180deg); }
+.flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+.flashcard-front { background-color: rgba(255,255,255,0.95); border: 2px solid #3498db; }
+.flashcard-back { background-color: #3498db; color: white; transform: rotateY(180deg); }
+#card-image { max-width: 100%; height: 140px; object-fit: contain; border-radius: 10px; margin-bottom: 10px; }
+#card-word { font-size: 2.2rem; font-weight: bold; margin: 0; color: #2c3e50; }
+#card-translation { font-size: 2rem; font-weight: bold; margin-bottom: 15px; }
+.click-hint { font-size: 0.9rem; background: rgba(0,0,0,0.1); padding: 5px 15px; border-radius: 20px; margin-top: auto; color: white;}
+.example-box { background-color: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; width: 100%; box-sizing: border-box; }
+#card-example-en { font-size: 1.2rem; font-weight: bold; margin: 0 0 5px 0; font-style: italic; }
+#card-example-ar { font-size: 1.1rem; margin: 0; }
+
+.dialogue-box { background: #f8f9fa; border: 2px solid #bdc3c7; border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 15px; min-height: 140px; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2;}
+.char-name { font-weight: bold; color: #3498db; font-size: 18px; margin-bottom: 10px; text-transform: capitalize; }
+.dial-text { font-size: 20px; font-weight: bold; color: #333; line-height: 1.4; }
+
+.character-buttons { display: flex; justify-content: space-around; gap: 15px; margin-top: 20px; }
+.char-btn { display: flex; flex-direction: column; align-items: center; background: #fdfdfd; border: 2px solid #ecf0f1; border-radius: 15px; padding: 15px; cursor: pointer; transition: 0.3s; color: #2c3e50; width: 45%; }
+.char-btn img { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; border: 2px solid transparent; }
+.char-btn:hover { border-color: #3498db; transform: scale(1.05); }
+
+.turn-indicator { padding: 12px; border-radius: 10px; font-weight: bold; margin: 15px 0; text-align: center; font-size: 16px; position: relative; z-index: 2;}
+.your-turn { background: #4caf50; color: white; }
+.app-turn { background: #3498db; color: white; }
+
+.action-btn { background-color: #003366; color: white; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; margin-bottom: 10px; text-align: left; padding-left: 20px;}
+.action-btn:hover { background-color: #f1c40f; color: #003366; }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+#play-audio-btn, #play-line-btn { background-color: #f1c40f; color: #333; text-align: center; padding-left: 0;}
+#play-audio-btn:hover, #play-line-btn:hover { background-color: #f39c12; }
+.hidden { display: none !important; }
+.navigation-buttons { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 15px; }
+.navigation-buttons button { width: auto; flex: 1; margin: 0; background: #34495e; color: #fff; border:none; padding:10px; border-radius:8px; cursor:pointer;}
+
+#sq-options-container button, #options-container button, #g-options-container button { 
+    display: block; width: 100%; padding: 15px; margin-bottom: 15px; 
+    background: #ffffff; border: 2px solid #3498db; border-radius: 12px; 
+    font-size: 1.2rem; font-weight: bold; color: #2c3e50; cursor: pointer; transition: all 0.3s ease; text-align: center;
+}
+#sq-options-container button:hover, #options-container button:hover, #g-options-container button:hover {
+    background: #f1f7ff; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+}
+.counter-style { font-weight: bold; color: #7f8c8d; margin-top: 25px; margin-bottom: 5px; font-size: 1.1rem; }
+#feedback-text, #g-feedback-text, #sq-feedback-text { font-size: 1.3rem; font-weight: bold; margin-top: 15px; }
+.success { background-color: #d4efdf !important; color: #27ae60 !important; border: 2px solid #27ae60 !important; }
+.fail { background-color: #fadbd8 !important; color: #c0392b !important; border: 2px solid #c0392b !important; }
+
+/* 🚨 تم تقيل الخط وتكبيره سنة وتغميق لونه عشان يظهر بوضوح 🚨 */
+.author-footer { margin-top: 30px; font-size: 1rem; color: #2c3e50; border-top: 1px solid #ddd; padding-top: 15px; text-align: center; font-weight: 900; letter-spacing: 0.5px; }
