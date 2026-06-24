@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HISHAM-ENGLISH-ACADEMY - Master Portal</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #344356; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .content-wrapper { position: relative; z-index: 1; }
+        
+        #login-screen, #dvds-screen, #lessons-screen { 
+            background-color: #f8f9fa; width: 100%; max-width: 550px; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center; position: relative; overflow: hidden; 
+        }
+        #dvds-screen, #lessons-screen { display: none; }
+        
+        /* العلامة المائية - اللوجو في الخلفية بشفافية 8% */
+        #login-screen::before, #dvds-screen::before, #lessons-screen::before { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; height: 85%; background-image: url('assets/logo.png'); background-size: contain; background-position: center; background-repeat: no-repeat; opacity: 0.08; z-index: 0; pointer-events: none; }
+        
+        .portal-logo-container { width: 80px; height: 80px; background-color: white; border-radius: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; overflow: hidden; margin: 0 auto 15px auto; z-index: 2; position: relative; }
+        .portal-logo-container img { width: 80%; height: auto; }
+        .portal-title { color: #2c3e50; font-size: 1.8rem; margin: 0 0 5px 0; font-weight: 900; position: relative; z-index: 2; text-transform: uppercase; }
+        .portal-subtitle { color: #8e44ad; font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 25px; font-weight: bold; position: relative; z-index: 2;}
+        
+        .input-group { text-align: left; margin-bottom: 20px; position: relative; z-index: 2; }
+        .input-group label { display: block; color: #34495e; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; }
+        .input-group input { width: 100%; padding: 12px; border: 1px solid #bdc3c7; border-radius: 8px; font-size: 1rem; box-sizing: border-box; outline: none; transition: border-color 0.3s; }
+        .input-group input:focus { border-color: #8e44ad; }
+        .dev-credit { font-size: 0.75rem; color: #7f8c8d; font-weight: bold; margin-bottom: 15px; letter-spacing: 1px; position: relative; z-index: 2; }
+        
+        .enter-btn { width: 100%; color: white; border: none; padding: 15px; font-size: 1.2rem; font-weight: bold; border-radius: 8px; transition: all 0.3s ease; position: relative; z-index: 2; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .btn-signin { background-color: #27ae60; } .btn-signin:hover { background-color: #219653; }
+        .btn-signup { background-color: #8e44ad; } .btn-signup:hover { background-color: #732d91; }
+        .toggle-auth { background: none; border: none; color: #8e44ad; text-decoration: underline; font-weight: bold; cursor: pointer; position: relative; z-index: 2; font-size: 0.9rem; margin-top: 10px;}
+        .error-msg { color: #e74c3c; font-weight: bold; font-size: 14px; margin-bottom: 15px; display: none; position: relative; z-index: 2; }
+
+        .status-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; color: white; position: relative; z-index: 2; margin-bottom: 15px;}
+        .status-free { background-color: #95a5a6; }
+        .status-pro { background-color: #f1c40f; color: #2c3e50;}
+        .btn-logout { position: relative; z-index: 2; background: none; border: none; color: #e74c3c; font-weight: bold; cursor: pointer; margin-bottom: 15px; font-size: 14px; text-decoration: underline; }
+
+        /* شبكة الديفيديهات */
+        .dvd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px; margin-top: 20px; position: relative; z-index: 2; max-height: 400px; overflow-y: auto; padding: 10px; }
+        .dvd-card { background: #8e44ad; color: white; padding: 20px 10px; border-radius: 12px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(142, 68, 173, 0.3); border: 2px solid transparent; }
+        .dvd-card:hover { transform: translateY(-5px); background: #732d91; border-color: #f1c40f; }
+        .dvd-locked { background: #ecf0f1; color: #95a5a6; cursor: not-allowed; box-shadow: none; border: 2px dashed #bdc3c7; }
+        .dvd-number { font-size: 1.4rem; font-weight: 900; margin-bottom: 5px;}
+        .dvd-status { font-size: 0.8rem; font-weight: bold; opacity: 0.9; }
+
+        /* قايمة الدروس */
+        .btn-back-dvd { background: none; border: none; color: #e74c3c; font-weight: bold; cursor: pointer; margin-bottom: 20px; font-size: 1rem; position: relative; z-index: 2; }
+        .lessons-container { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; position: relative; z-index: 2; max-height: 400px; overflow-y: auto; padding-right: 5px;}
+        .lesson-btn { display: block; width: 100%; padding: 15px; border-radius: 8px; font-size: 1.05rem; font-weight: bold; text-decoration: none; box-sizing: border-box; transition: all 0.3s ease; cursor: pointer; text-align: left; }
+        .lesson-pro { background-color: #ecf0f1; color: #7f8c8d; border: 2px dashed #bdc3c7; display: flex; justify-content: space-between; align-items: center; }
+        .pro-badge { background-color: #f1c40f; color: #2c3e50; padding: 4px 8px; border-radius: 5px; font-size: 0.75rem; font-weight: 900; }
+        .lesson-unlocked { background-color: #27ae60; color: white; border: 2px solid #27ae60; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3); }
+
+        #unlock-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(44, 62, 80, 0.9); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-box { background-color: white; width: 90%; max-width: 400px; padding: 30px; border-radius: 15px; text-align: center; }
+        .modal-box h2 { color: #8e44ad; font-weight: 900;}
+        .modal-box input { width: 90%; padding: 15px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 1.2rem; text-align: center; margin-bottom: 20px; text-transform: uppercase; font-weight: bold;}
+        .modal-buttons { display: flex; gap: 10px; }
+        .modal-btn { padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; flex: 1; border: none;}
+        .btn-cancel { background-color: #ecf0f1; color: #7f8c8d; }
+        .btn-unlock { background-color: #8e44ad; color: white; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="content-wrapper">
+            <div class="portal-logo-container">
+                <img src="assets/logo.png" alt="Logo" onerror="this.style.display='none'">
+            </div>
+            <h1 class="portal-title">HISHAM-ENGLISH-ACADEMY</h1>
+            <h2 class="portal-subtitle">MASTER PORTAL</h2>
+            <p id="auth-error" class="error-msg"></p>
+
+            <div class="input-group" id="name-group" style="display: none;">
+                <label>Student Name</label>
+                <input type="text" id="user-name" placeholder="Enter your full name...">
+            </div>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="user-email" placeholder="student@example.com">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="user-pass" placeholder="Enter your password...">
+            </div>
+
+            <p class="dev-credit">Created by : Hisham Embaby</p>
+
+            <button id="btn-signin" class="enter-btn btn-signin">SIGN IN 🔐</button>
+            <button id="btn-signup" class="enter-btn btn-signup" style="display: none;">CREATE ACCOUNT 🎓</button>
+            <button id="toggle-to-signup" class="toggle-auth">New Student? Create Account</button>
+            <button id="toggle-to-signin" class="toggle-auth" style="display: none;">Already have an account? Sign In</button>
+        </div>
+    </div>
+
+    <div id="dvds-screen">
+        <div class="content-wrapper">
+            <h1 id="welcome-text" style="color: #2c3e50; margin-bottom: 5px; position: relative; z-index: 2;">Welcome!</h1>
+            <div id="student-status" class="status-badge status-free">Free Student</div>
+            <br>
+            <button id="btn-logout" class="btn-logout">🚪 Log out</button>
+            <h2 style="color: #8e44ad; font-size: 1.2rem; margin: 10px 0; position: relative; z-index: 2;">Select a Course:</h2>
+            <div class="dvd-grid" id="dvd-grid-container"></div>
+        </div>
+    </div>
+
+    <div id="lessons-screen">
+        <div class="content-wrapper">
+            <button class="btn-back-dvd" onclick="showScreen('dvds-screen')">🔙 Back to Courses</button>
+            <h1 id="current-dvd-title" style="color: #8e44ad; margin-bottom: 5px; position: relative; z-index: 2; font-weight: 900;">DVD 1</h1>
+            <p style="color: #7f8c8d; font-weight: bold; position: relative; z-index: 2;">Choose a lesson to start</p>
+            <div class="lessons-container" id="lessons-container"></div>
+        </div>
+    </div>
+
+    <div id="unlock-modal">
+        <div class="modal-box">
+            <h2>👑 Upgrade to PRO</h2>
+            <p>Enter your Activation Code to unlock all DVDs.</p>
+            <input type="text" id="activation-pass" placeholder="CODE-HERE">
+            <div class="modal-buttons">
+                <button class="modal-btn btn-cancel" id="btn-close-modal">Cancel</button>
+                <button class="modal-btn btn-unlock" id="btn-submit-pass">Verify Code 🔓</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyBNF8mnf0ucVbAbuZojokGSKNnUvQNvoGk",
+          authDomain: "hisham-s-english-academy.firebaseapp.com",
+          projectId: "hisham-s-english-academy",
+          storageBucket: "hisham-s-english-academy.firebasestorage.app",
+          messagingSenderId: "766824698161",
+          appId: "1:766824698161:web:aeb8d7ab371912e7aee010"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const loginScreen = document.getElementById('login-screen');
+        const dvdsScreen = document.getElementById('dvds-screen');
+        const lessonsScreen = document.getElementById('lessons-screen');
+        const errorMsg = document.getElementById('auth-error');
+        const unlockModal = document.getElementById('unlock-modal');
+        const studentStatusBadge = document.getElementById('student-status');
+        
+        let currentUserUid = null;
+        let isProStudent = false;
+
+        window.showScreen = (id) => {
+            loginScreen.style.display = 'none'; dvdsScreen.style.display = 'none'; lessonsScreen.style.display = 'none';
+            document.getElementById(id).style.display = 'block';
+        };
+
+        document.getElementById('toggle-to-signup').onclick = () => { document.getElementById('name-group').style.display = 'block'; document.getElementById('btn-signin').style.display = 'none'; document.getElementById('toggle-to-signup').style.display = 'none'; document.getElementById('btn-signup').style.display = 'block'; document.getElementById('toggle-to-signin').style.display = 'inline-block'; };
+        document.getElementById('toggle-to-signin').onclick = () => { document.getElementById('name-group').style.display = 'none'; document.getElementById('btn-signin').style.display = 'block'; document.getElementById('toggle-to-signup').style.display = 'inline-block'; document.getElementById('btn-signup').style.display = 'none'; document.getElementById('toggle-to-signin').style.display = 'none'; };
+
+        // 🔥 كود تسجيل الطلبة الجداد مضاف فيه الإيميل، التاريخ، وكلمة "English Academy"
+        document.getElementById('btn-signup').onclick = () => {
+            const name = document.getElementById('user-name').value.trim();
+            const email = document.getElementById('user-email').value.trim();
+            const pass = document.getElementById('user-pass').value.trim();
+            createUserWithEmailAndPassword(auth, email, pass).then(async (res) => {
+                await updateProfile(res.user, { displayName: name });
+                
+                const today = new Date();
+                const formattedDate = today.toLocaleDateString('en-GB');
+
+                await setDoc(doc(db, "students", res.user.uid), { 
+                   fullName: name, 
+                   email: email,
+                   accountStatus: "free_student",
+                   joinDate: formattedDate,
+                   proCodeUsed: "",
+                   subscriptionEndDate: "",
+                   course: "English Academy"
+                });
+                
+                window.location.reload();
+            }).catch(e => { errorMsg.innerText = e.message; errorMsg.style.display = 'block'; });
+        };
+
+        document.getElementById('btn-signin').onclick = () => {
+            const email = document.getElementById('user-email').value.trim();
+            const pass = document.getElementById('user-pass').value.trim();
+            signInWithEmailAndPassword(auth, email, pass).catch(e => { errorMsg.innerText = "Login Failed!"; errorMsg.style.display = 'block'; });
+        };
+
+        document.getElementById('btn-logout').onclick = () => signOut(auth);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                showScreen('dvds-screen');
+                document.getElementById('welcome-text').innerText = `Welcome, ${user.displayName || "Student"}!`;
+                currentUserUid = user.uid;
+                const docSnap = await getDoc(doc(db, "students", user.uid));
+                if (docSnap.exists() && docSnap.data().accountStatus === "pro_student") {
+                    isProStudent = true;
+                    studentStatusBadge.innerText = "👑 PRO Student";
+                    studentStatusBadge.className = "status-badge status-pro";
+                }
+                buildDVDGrid();
+                
+                const urlParams = new URLSearchParams(window.location.search);
+                const targetDvd = urlParams.get('dvd');
+                if (targetDvd) {
+                    const activeDVDs = { 1: 7, 2: 7, 3: 6 }; 
+                    if (activeDVDs[targetDvd]) {
+                        openDVDLessons(targetDvd, activeDVDs[targetDvd]);
+                    }
+                }
+
+            } else { showScreen('login-screen'); isProStudent = false; }
+        });
+
+        function buildDVDGrid() {
+            const container = document.getElementById('dvd-grid-container');
+            container.innerHTML = '';
+            
+            const activeDVDs = { 1: 7, 2: 7, 3: 6 }; 
+            
+            for(let i = 1; i <= 26; i++) {
+                let card = document.createElement('div');
+                if (activeDVDs[i]) {
+                    card.className = "dvd-card";
+                    card.innerHTML = `<div class="dvd-number">DVD ${i}</div><div class="dvd-status">${activeDVDs[i]} Lessons</div>`;
+                    card.onclick = () => openDVDLessons(i, activeDVDs[i]);
+                } else {
+                    card.className = "dvd-card dvd-locked";
+                    card.innerHTML = `<div class="dvd-number">DVD ${i}</div><div class="dvd-status">Coming Soon</div>`;
+                }
+                container.appendChild(card);
+            }
+        }
+
+        function openDVDLessons(dvdNum, total) {
+            document.getElementById('current-dvd-title').innerText = `DVD ${dvdNum} Lessons`;
+            const container = document.getElementById('lessons-container');
+            container.innerHTML = '';
+            for(let i = 1; i <= total; i++) {
+                let canAccess = (i === 1 || isProStudent);
+                let btn = document.createElement('div');
+                if (canAccess) {
+                    btn.className = "lesson-btn lesson-unlocked";
+                    btn.innerHTML = `<span>🔓 Lesson ${i}</span> <span class="pro-badge" style="background:white; color:#27ae60;">${i===1?'FREE':'OPEN'}</span>`;
+                    
+                    btn.onclick = () => { window.location.href = `DVD${dvdNum}/dvd${dvdNum}-lesson${i}/index.html`; }; 
+                } else {
+                    btn.className = "lesson-btn lesson-pro";
+                    btn.innerHTML = `<span>🔒 Lesson ${i}</span><span class="pro-badge">PRO 👑</span>`;
+                    btn.onclick = () => { unlockModal.style.display = 'flex'; };
+                }
+                container.appendChild(btn);
+            }
+            showScreen('lessons-screen');
+        }
+
+        document.getElementById('btn-close-modal').onclick = () => unlockModal.style.display = 'none';
+        document.getElementById('btn-submit-pass').onclick = async () => {
+            const code = document.getElementById('activation-pass').value.trim().toUpperCase();
+            if (!code) return;
+            const codeRef = doc(db, "activation_codes", code);
+            const snap = await getDoc(codeRef);
+            if (snap.exists() && snap.data().status === "active") {
+                await updateDoc(doc(db, "students", currentUserUid), { accountStatus: "pro_student", proCodeUsed: code });
+                await updateDoc(codeRef, { status: "used", usedBy: currentUserUid });
+                window.location.reload();
+            } else { alert("Invalid or Used Code! ❌"); }
+        };
+    </script>
+</body>
+</html>

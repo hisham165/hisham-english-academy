@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator - HISHAM-ENGLISH-ACADEMY</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #1e272e; 
+            color: white; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+        .admin-box { 
+            background-color: #2c3e50; 
+            padding: 40px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            width: 100%; 
+            max-width: 450px; 
+            text-align: center; 
+            border-top: 5px solid #8e44ad;
+        }
+        h1 { color: #f1c40f; margin-top: 0; margin-bottom: 5px; font-size: 1.6rem; text-transform: uppercase; }
+        p { color: #bdc3c7; margin-bottom: 30px; font-size: 0.9rem; }
+        
+        .control-group { text-align: right; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 10px; font-weight: bold; color: #ecf0f1; }
+        
+        select { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: none; 
+            font-size: 1rem; 
+            background: #34495e; 
+            color: white; 
+            outline: none;
+            cursor: pointer;
+        }
+
+        .gen-btn { 
+            background-color: #8e44ad; 
+            color: white; 
+            border: none; 
+            padding: 15px 30px; 
+            border-radius: 8px; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            width: 100%; 
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .gen-btn:hover { background-color: #9b59b6; transform: scale(1.02); }
+        .gen-btn:disabled { background-color: #7f8c8d; cursor: not-allowed; }
+
+        #result-container { 
+            margin-top: 30px; 
+            padding: 20px; 
+            background-color: #16a085; 
+            border-radius: 10px; 
+            display: none; 
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .code-display { 
+            font-size: 1.5rem; 
+            font-weight: 900; 
+            letter-spacing: 2px; 
+            margin: 10px 0; 
+            display: block; 
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .copy-hint { font-size: 0.8rem; color: #e0e0e0; }
+        .dev-footer { margin-top: 25px; font-size: 0.7rem; color: #7f8c8d; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-box">
+        <h1>HISHAM ACADEMY</h1>
+        <p>لوحة توليد مفاتيح الاشتراك PRO</p>
+
+        <div class="control-group">
+            <label>اختر مدة الاشتراك:</label>
+            <select id="duration-select">
+                <option value="3">3 شهور (Standard)</option>
+                <option value="6">6 شهور (Silver)</option>
+                <option value="12">12 شهر (Gold - Full Year)</option>
+                <option value="99">مدى الحياة (VIP)</option>
+            </select>
+        </div>
+
+        <button id="generate-btn" class="gen-btn">توليد وتسجيل الكود برو 🪄</button>
+
+        <div id="result-container">
+            <div style="font-weight: bold; margin-bottom: 5px;">تم التوليد بنجاح! ✅</div>
+            <code id="generated-code" class="code-display"></code>
+            <div class="copy-hint">انسخ الكود وابعته للطالب المشترك</div>
+        </div>
+
+        <div class="dev-footer">Created by : Hisham Embaby</div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // نفس إعدادات الفايربيز الخاصة بك
+        const firebaseConfig = {
+          apiKey: "AIzaSyBNF8mnf0ucVbAbuZojokGSKNnUvQNvoGk",
+          authDomain: "hisham-s-english-academy.firebaseapp.com",
+          projectId: "hisham-s-english-academy",
+          storageBucket: "hisham-s-english-academy.firebasestorage.app",
+          messagingSenderId: "766824698161",
+          appId: "1:766824698161:web:aeb8d7ab371912e7aee010"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const btn = document.getElementById('generate-btn');
+        const resultContainer = document.getElementById('result-container');
+
+        btn.addEventListener('click', async () => {
+            btn.innerText = "جاري التوليد... ⏳";
+            btn.disabled = true;
+
+            try {
+                // 1. صناعة الكود (مثال: ENG3-XXXX-1234)
+                const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
+                const randomNum = Math.floor(1000 + Math.random() * 9000);
+                const duration = document.getElementById('duration-select').value;
+                const finalCode = `ENG${duration}-${randomStr}-${randomNum}`;
+                
+                // 2. تسجيل الكود في Firestore
+                await setDoc(doc(db, "activation_codes", finalCode), {
+                    code: finalCode,
+                    durationMonths: parseInt(duration),
+                    status: "active",
+                    createdAt: new Date().toLocaleString('en-GB'),
+                    usedBy: "" 
+                });
+                
+                // 3. عرض النتيجة
+                document.getElementById('generated-code').innerText = finalCode;
+                resultContainer.style.display = 'block';
+                
+            } catch (error) {
+                console.error("Error: ", error);
+                alert("مشكلة في الاتصال! تأكد من الإنترنت.");
+            } finally {
+                btn.innerText = "توليد وتسجيل الكود برو 🪄";
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
