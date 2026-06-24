@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Today - Lesson 4</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-card">
+        
+        <img src="assets/images/logo.png" class="watermark" alt="Watermark" onerror="this.src='assets/logo.png'; this.onerror=null;">
+
+        <div class="content-wrapper">
+            
+            <div id="screen-menu" class="app-screen active">
+                
+                <button style="background: #f8f9fa; border: 2px solid #e74c3c; color: #e74c3c; font-weight: bold; font-size: 16px; cursor: pointer; padding: 10px; border-radius: 10px; width: 95%; margin: 0 auto 15px auto; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.location.href='../../index.html?dvd=1'">🔙 Back to DVD 1 Lessons</button>
+
+                <div style="text-align:center; margin-bottom:15px;">
+                    <img src="assets/images/logo.png" alt="Logo" style="width:100px; border-radius:50%; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" onerror="this.src='assets/logo.png'; this.onerror=null;">
+                </div>
+                <h1 class="section-title">English Today</h1>
+                <p id="welcomeMsg" style="text-align:center; color:#e53935; font-weight:bold; margin-bottom:5px; font-size: 18px;">Welcome! 👋</p>
+                <p class="lesson-title">Lesson 4 : A lot of questions for a set of Chinese plates!</p>
+                
+                <div class="menu-list">
+                    <button class="menu-item" onclick="showScreen('screen-video')"><span>🎬 1. Watch Conversation</span></button>
+                    <button class="menu-item" onclick="startStoryQuiz()"><span>💬 2. Story Quiz</span></button>
+                    <button class="menu-item" onclick="startVocabSection()"><span>🃏 3. Difficult Words</span></button>
+                    <button class="menu-item" onclick="startVocabQuiz()"><span>🎯 4. Words Quiz</span></button>
+                    <button class="menu-item" onclick="startLearnLines()"><span>🗣️ 5. Learn The Lines</span></button>
+                    <button class="menu-item" onclick="startRoleplaySelect()"><span>🎭 6. Roleplay Mode</span></button>
+                    <button class="menu-item" onclick="startListenWrite()"><span>✍️ 7. Listen & Write (Words)</span></button>
+                    <button class="menu-item" onclick="startListenWriteConv()"><span>📝 8. Listen & Write (Story)</span></button>
+                    <button class="menu-item" onclick="showScreen('screen-grammar-video')"><span>📺 9. Grammar Video</span></button>
+                    <button class="menu-item" onclick="startGrammarQuiz()"><span>✅ 10. Grammar Quiz</span></button>
+                </div>
+            </div>
+
+            <div id="screen-video" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Watch Conversation</h1>
+                <div class="iframe-container">
+                    <iframe src="https://rumble.com/embed/v773mcg/?pub=4patlm" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                </div>
+                <button class="btn-action" style="background-color: #e67e22;" onclick="startStoryQuiz()">Take Story Quiz 💬</button>
+            </div>
+
+            <div id="screen-story-quiz" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Story Quiz</h1>
+                
+                <div id="story-quiz-area">
+                    <p class="hint">Answer questions about Jack and Anne</p>
+                    <div class="dialogue-box">
+                        <p id="sqQuestionText" style="font-size: 20px; font-weight: bold; color: var(--dark-blue);"></p>
+                    </div>
+                    <div id="sq-options" style="margin-top: 15px;"></div>
+                    <p id="sqProgress" style="text-align: center; margin-top: 15px; font-weight: bold; color: #555;"></p>
+                    
+                    <button id="sqNextBtn" class="btn-action" style="display:none; background:#4caf50; margin-top: 15px;" onclick="nextSqQuestion()">Next Question ➡️</button>
+                </div>
+
+                <div id="sq-result-area" class="result-box">
+                    <h2>Quiz Finished!</h2>
+                    <p id="sqScoreFraction" class="fraction-score"></p>
+                    <p id="sqFinalScore" style="font-size: 45px; font-weight: bold; margin: 5px 0 20px 0; color: var(--dark-blue);">0%</p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+            </div>
+
+            <div id="screen-flashcards" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Difficult Words</h1>
+                
+                <div class="flashcard-box" id="fcBox" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img id="fcImg" class="fc-img" src="" alt="Word Image">
+                            <p class="fc-word" id="fcWordMain"></p>
+                        </div>
+                        <div class="card-back">
+                            <p class="fc-meaning" id="fcWordSub"></p>
+                            <p class="fc-example" id="fcWordEx"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="hint">👆 Click the card to flip</p>
+                <button class="btn-action" onclick="event.stopPropagation(); playWordAudio()">🔊 Listen</button>
+                <audio id="wordAudio"></audio>
+
+                <div class="nav-controls">
+                    <button class="btn-nav" onclick="prevCard()">Prev</button>
+                    <span class="counter-text" id="fcCounter"></span>
+                    <button class="btn-nav" onclick="nextCard()">Next</button>
+                </div>
+            </div>
+
+            <div id="screen-words-quiz" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Words Quiz</h1>
+                
+                <div id="wq-question-area">
+                    <p class="hint">Listen carefully then choose</p>
+                    <button class="btn-action" onclick="playWqAudio()">🔊 Listen to word</button>
+                    <div id="wq-options" style="margin-top: 15px;"></div>
+                    <p id="wqProgress" style="text-align: center; margin-top: 15px; font-weight: bold; color: #555;"></p>
+                    <button id="wqNextBtn" class="btn-action" style="display:none; background:#4caf50; margin-top: 15px;" onclick="nextWqQuestion()">Next Question ➡️</button>
+                </div>
+
+                <div id="wq-result-area" class="result-box">
+                    <h2>Quiz Finished!</h2>
+                    <p id="wqScoreFraction" class="fraction-score"></p>
+                    <p id="wqFinalScore" style="font-size: 45px; font-weight: bold; margin: 5px 0 20px 0; color: var(--dark-blue);">0%</p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+                <audio id="wqAudio"></audio>
+            </div>
+
+            <div id="screen-learn-lines" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Learn The Lines</h1>
+                <p class="hint">Listen and repeat</p>
+                
+                <div class="dialogue-box">
+                    <img id="speaker-img" class="speaker-avatar" src="">
+                    <p class="char-name" id="learnChar"></p>
+                    <p class="dial-text" id="learnText"></p>
+                </div>
+                
+                <button class="btn-action" onclick="playLearnAudio()">🔊 Listen</button>
+                <audio id="learnAudio"></audio>
+
+                <div class="nav-controls">
+                    <button class="btn-nav" onclick="prevLearn()">Prev</button>
+                    <span class="counter-text" id="learnCounter"></span>
+                    <button class="btn-nav" onclick="nextLearn()">Next</button>
+                </div>
+            </div>
+
+            <div id="screen-roleplay-select" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Roleplay Mode</h1>
+                <p class="hint" style="margin-bottom: 0;">Choose your role</p>
+                
+                <div class="roleplay-container" id="roleplay-buttons-area"></div>
+            </div>
+
+            <div id="screen-roleplay-active" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-roleplay-select')">↩ Back to Roles</button>
+                <h1 class="section-title">Roleplay</h1>
+                <p class="hint">You are playing as: <span id="chosen-role-name" style="color:#9b59b6;"></span></p>
+                
+                <div id="rp-content-area">
+                    <div id="rp-live-chat" class="live-chat-container"></div>
+                    <div id="user-turn-box" class="user-turn-box" style="display:none;">
+                        <div class="user-turn-label">It's your turn! Say:</div>
+                        <div id="user-turn-text" class="user-turn-text"></div>
+                        <button id="rp-record-btn" class="record-btn">🎙️ Click to Record</button>
+                        <p id="rp-recording-hint" style="color:#e74c3c; font-size:15px; display:none; margin-top:10px; font-weight:bold;">Recording... Click to stop</p>
+                    </div>
+                    <div id="rpIndicator" class="turn-indicator"></div>
+                    <div id="micArea" style="display:none; text-align:center;">
+                        <audio id="userAudioPlayback" controls style="margin-top: 10px; width: 100%; display: none;"></audio>
+                    </div>
+                    <button id="rp-next-btn" class="btn-action hidden" style="background-color: #2ecc71;">Next Line ➡️</button>
+                    <audio id="rpAudio"></audio>
+                </div>
+
+                <div id="rp-result-area" class="result-box">
+                    <h2>Roleplay Completed!</h2>
+                    <div id="rp-chat-container" class="live-chat-container" style="max-height: 350px;"></div>
+                    <button class="btn-action" style="background-color: #e67e22;" onclick="startRoleplayPlayback()">🎧 Listen to your conversation</button>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+            </div>
+
+            <div id="screen-roleplay-playback" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-roleplay-active')">↩ Back to Roleplay</button>
+                <h1 class="section-title">Your Conversation</h1>
+                <button class="btn-action" id="btnPlayAllDialogue">▶️ Play Entire Dialogue</button>
+                <div id="playbackList" class="playback-list"></div>
+                <audio id="seqAudioPlayer"></audio>
+            </div>
+
+            <div id="screen-listen-write" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Listen & Write</h1>
+                <div id="lw-content-area" class="quiz-box" style="border: none; box-shadow: none; padding: 0;">
+                    <p class="hint">Listen and type the word</p>
+                    <p id="lwProgress" class="quiz-counter"></p>
+                    <button class="audio-btn" onclick="playLwAudio()" style="margin: 10px auto;">🔊 Listen</button>
+                    <audio id="lwAudio"></audio>
+                    <input type="text" id="lwInput" class="lw-input" placeholder="Type here..." autocomplete="off">
+                    <button class="btn-action" id="lwCheckBtn" onclick="checkLwAnswer()">✅ Check Answer</button>
+                    <p id="lwFeedback" class="feedback-text"></p>
+                    <button class="btn-action hidden" id="lwNextBtn" onclick="nextLwWord()" style="background:#4caf50;">Next Word</button>
+                </div>
+                <div id="lw-result-area" class="final-score-box hidden">
+                    <h2 style="color: #27ae60;">Practice Finished!</h2>
+                    <p id="lwScoreFraction" class="score-label"></p>
+                    <p id="lwFinalScore" class="score-number"></p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+            </div>
+
+            <div id="screen-listen-write-conv" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Listen & Write (Story)</h1>
+                <div id="lwc-content-area" class="quiz-box" style="border: none; box-shadow: none; padding: 0;">
+                    <p class="hint">Listen and type the sentence</p>
+                    <p id="lwcProgress" class="quiz-counter"></p>
+                    <button class="audio-btn" onclick="playLwcAudio()" style="margin: 10px auto;">🔊 Listen to line</button>
+                    <audio id="lwcAudio"></audio>
+                    <input type="text" id="lwcInput" class="lw-input" placeholder="Type the sentence here..." autocomplete="off">
+                    <button class="btn-action" id="lwcCheckBtn" onclick="checkLwcAnswer()">✅ Check Answer</button>
+                    <p id="lwcFeedback" class="feedback-text"></p>
+                    <button class="btn-action hidden" id="lwcNextBtn" onclick="nextLwcLine()" style="background:#4caf50;">Next Line</button>
+                </div>
+                <div id="lwc-result-area" class="final-score-box hidden">
+                    <h2 style="color: #27ae60;">Practice Finished!</h2>
+                    <p id="lwcScoreFraction" class="score-label"></p>
+                    <p id="lwcFinalScore" class="score-number"></p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+            </div>
+
+            <div id="screen-grammar-video" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Grammar Video</h1>
+                <div class="iframe-container">
+                    <iframe src="https://rumble.com/embed/v773mmm/?pub=4patlm" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                </div>
+                <button class="btn-action" style="background-color: #2ecc71;" onclick="startGrammarQuiz()">Take Grammar Quiz ✅</button>
+            </div>
+
+            <div id="screen-grammar-quiz" class="app-screen">
+                <button class="btn-back" onclick="showScreen('screen-menu')">↩ Back to Menu</button>
+                <h1 class="section-title">Grammar Quiz</h1>
+                
+                <div id="gq-question-area">
+                    <div class="dialogue-box">
+                        <p id="gqQuestionText" style="font-size: 20px; font-weight: bold; color: var(--dark-blue);"></p>
+                    </div>
+                    <div id="gq-options" style="margin-top: 15px;"></div>
+                    <p id="gqProgress" style="text-align: center; margin-top: 15px; font-weight: bold; color: #555;"></p>
+                    
+                    <button id="gqNextBtn" class="btn-action" style="display:none; background:#4caf50; margin-top: 15px;" onclick="nextGqQuestion()">Next Question ➡️</button>
+                </div>
+
+                <div id="gq-result-area" class="result-box">
+                    <h2>Quiz Finished!</h2>
+                    <p id="gqScoreFraction" class="fraction-score"></p>
+                    <p id="gqFinalScore" style="font-size: 45px; font-weight: bold; margin: 5px 0 20px 0; color: var(--dark-blue);">0%</p>
+                    <button class="btn-action" onclick="showScreen('screen-menu')">Back to Menu</button>
+                </div>
+            </div>
+
+            <audio id="correctAudio" src="assets/sounds/correct.mp3"></audio>
+            <audio id="wrongAudio" src="assets/sounds/wrong.mp3"></audio>
+
+            <div class="app-footer">Developed by Hisham Embaby</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNF8mnf0ucVbAbuZojokGSKNnUvQNvoGk",
+            authDomain: "hisham-s-english-academy.firebaseapp.com",
+            projectId: "hisham-s-english-academy",
+            storageBucket: "hisham-s-english-academy.firebasestorage.app",
+            messagingSenderId: "766824698161",
+            appId: "1:766824698161:web:aeb8d7ab371912e7aee010"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUid = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUid = user.uid;
+                window.currentStudentName = user.displayName;
+                const welcomeMsg = document.getElementById('welcomeMsg');
+                if(welcomeMsg) welcomeMsg.innerText = `Welcome, ${user.displayName}! 👋`;
+            } else {
+                console.log("Local testing active. Redirect bypassed.");
+            }
+        });
+
+        window.markLessonCompleted = async function() {
+            if (!currentUid) return;
+            try {
+                const studentRef = doc(db, "students", currentUid);
+                // بنسجل إن الطالب ده خلص (dvd1-lesson4)
+                await updateDoc(studentRef, {
+                    completedLessons: arrayUnion("dvd1-lesson4") 
+                });
+                console.log("تم إرسال إشارة النجاح للبوابة بنجاح! ✅");
+            } catch (e) { console.error("Error saving progress:", e); }
+        };
+    </script>
+</body>
+</html>
