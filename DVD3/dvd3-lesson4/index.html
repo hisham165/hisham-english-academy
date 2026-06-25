@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineLingo - DVD 3 Lesson 04</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="app-container">
+
+       <div id="home-stage" class="stage active watermark-bg">
+        <button class="back-main-btn" onclick="window.location.href='../../index.html'">🏠 Back to Main Portal</button>
+        <div style="clear: both;"></div>
+
+        <img src="images/logo.png" alt="Logo" class="main-logo">
+        <h1 style="color: #8e44ad; margin-bottom: 5px;">Lesson 01</h1>
+        <p style="color: #34495e; font-size: 1.1rem; margin-bottom: 5px; font-weight: bold;">welcome to DVD 3</p>
+        <h3 style="color: #5b2c6f; font-size: 1.2rem; margin-top: 0; margin-bottom: 20px;">That's Life!</h3>
+            
+            <div class="menu-grid">
+                <button class="action-btn" onclick="goToStage('story-video-stage')">🎬 1. Watch Story</button>
+                <button class="action-btn" onclick="startStoryQuiz()" style="background-color: #27ae60;">❓ 2. Story Quiz</button>
+                <button class="action-btn" onclick="goToStage('words-stage')">🃏 3. Vocabulary</button>
+                <button class="action-btn" onclick="startWordsQuiz()" style="background-color: #27ae60;">📝 4. Words Quiz</button>
+                <button class="action-btn" onclick="goToStage('learn-lines-stage')">🗣️ 5. Learn Lines</button>
+                <button class="action-btn" onclick="startDictation()" style="background-color: #d35400;">✍️ 6. Listen & Write</button>
+                <button class="action-btn" onclick="goToStage('character-select-stage')">🎭 7. Roleplay</button>
+                <button class="action-btn" onclick="goToStage('grammar-stage')">👨‍🏫 8. Grammar Lesson</button>
+                <button class="action-btn" onclick="startGrammarQuiz()" style="background-color: #27ae60;">🧠 9. Grammar Quiz</button>
+            </div>
+            <div class="author-footer">Created by : Hisham Embaby</div>
+        </div>
+
+        <div id="story-video-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">↩ Back to Menu</button>
+            <div style="clear: both;"></div>
+            <h1>The Story</h1>
+            <div class="video-container" style="position:relative; padding-top:56.25%; height:0; overflow:hidden; border-radius:15px; border:4px solid #fff;">
+                <iframe class="rumble" width="100%" height="100%" src="https://rumble.com/embed/v77yqlw/?pub=4patlm&rel=0" frameborder="0" allowfullscreen style="position:absolute; top:0; left:0; border:0;"></iframe>
+            </div>
+            <button class="action-btn" onclick="startStoryQuiz()" style="margin-top:15px; background-color: #27ae60;">Next: Story Quiz ❓</button>
+            <div class="author-footer">Created by : Hisham Embaby</div>
+        </div>
+
+        <div id="story-quiz-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">↩ Back to Menu</button>
+            <div style="clear: both;"></div>
+            <h1 style="color: #5b2c6f;">Story Quiz</h1>
+            <div id="sq-quiz-content" style="width: 100%;">
+                <div style="background: #f8f9fa; border: 1px solid #bdc3c7; border-radius: 15px; padding: 40px 20px; margin-bottom: 25px;">
+                    <p id="sq-question-text" style="font-size: 1.5rem; font-weight: bold; color: #5b2c6f; margin: 0;"></p>
+                </div>
+                <div id="sq-options-container"></div>
+                <p id="sq-feedback-text"></p>
+                <button id="sq-next-question-btn" class="hidden action-btn" style="margin-top: 15px;">Next Question ➡️</button>
+                <p id="sq-quiz-counter" class="counter-style"></p>
+            </div>
+            <div id="sq-final-score-container" class="hidden">
+                <h2 id="sq-score-text" style="font-size: 1.6rem; color: #34495e; margin-bottom: 20px; line-height: 1.6;"></h2>
+                <button class="action-btn" onclick="goToStage('words-stage')">Next: Vocabulary 🃏</button>
+            </div>
+            <div class="author-footer">Created by : Hisham Embaby</div>
+        </div>
+
+        <div id="words-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">↩ Back to Menu</button>
+            <div style="clear: both;"></div>
+            <h1>Vocabulary</h1>
+            <div class="flashcard-container" id="flashcard-container" onclick="flipCard()">
+                <div class="flashcard-inner" id="flashcard-inner">
+                    <div class="flashcard-front">
+                        <img id="card-image" src="" alt="Word">
+                        <p id="card-word">Word</p>
+                        <p class="click-hint">👉 Click to flip</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <p id="card-translation" dir="rtl"></p>
+                        <div class="def-box">
+                            <span style="color: #8e44ad; font-weight: bold; font-size: 1.1rem;">Def:</span> 
+                            <span id="card-definition"></span>
+                        </div>
+                        <div class="example-box">
+                            <p id="card-example-en"></p>
+                        </div>
+                        <p class="click-hint">👉 Click to return</p>
+                    </div>
+                </div>
+            </div>
+            <div class="controls-container">
+                <audio id="card-audio" src=""></audio>
+                <button id="play-audio-btn" class="action-btn" style="background-color: #f1c40f; color: #333; margin-bottom: 15px;" onclick="playVocabAudio()">🔊 Play Audio</button>
+                <div class="navigation-buttons" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <button class="nav-btn" onclick="changeWord(-1)">⬅️ Previous</button>
+                    <span id="word-counter-text">1 / 14</span>
+                    <button class="nav-btn" onclick="changeWord(1)">Next ➡️</button>
+                </div>
+                <button class="action-btn" onclick="startWordsQuiz()" style="background-color: #e67e22;">📝 Words Quiz</button>
+            </div>
+            <div class="author-footer">Created by : Hisham Embaby</div>
+        </div>
+
+        <div id="quiz-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">↩ Back to Menu</button>
+            <div style="clear: both;"></div>
+            <h1>Words Quiz</h1>
+            <div id="quiz-content">
+                <div style="background: #f8f9fa; border: 1px solid #bdc3c7; border-radius: 15px; padding: 20px; margin-bottom: 25px;">
+                    <p style="font-size: 1.3rem; font-weight: bold; color: #5b2c6f; margin-bottom:15px;">Listen and choose the correct word:</p>
+                    <button class="action-btn" style="background-color: #f1c40f; color: #333;" onclick="playQuizWordAudio()">🔊 Listen Again</button>
+                    <audio id="quiz-word-audio"></audio>
+                </div>
+                <div id="options-container"></div>
+                <p id="feedback-text"></p>
+                <button id="next-question-btn" class="hidden action-btn" onclick="nextQuizQuestion()">Next Question ➡️</button>
+                <p id="quiz-counter" class="counter-style"></p>
+            </div>
+            <div id="final-score-container" class="hidden">
+                <h2 id="score-text" style="font-size: 1.6rem; color: #34495e; margin-bottom: 20px; line-height: 1.6;"></h2>
+                <button class="action-btn" onclick="goToStage('learn-lines-stage')">Next: Learn Lines 🗣️</button>
+            </div>
+            <div class="author-footer">Created by : Hisham Embaby</div>
+        </div>
+
+        <div id="learn-lines-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">↩ Back to Menu</button>
+            <div style="clear: both;"></div>
+            <h1>Learn Lines</h1>
+            <div style="background: #fff; padding: 30px 20px; border-radius: 15px; border: 3px dashed #8e44ad; margin-bottom: 15px;">
+                <img id="speaker-img" src="" alt="Speaker" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid #ecf0f1;">
+                <h2 id="speaker-name" style="color: #5b2c6f;">Name</h2>
+                <p id="english-line" style="font-size: 1.4rem; font-weight: bold; color: #2c3e50; line-height: 1.4; white-space: pre-line;"></p>
+            </div>
+            <div class="controls-container">
+                <audio id="line-audio"></audio>
+                <button class="action-btn" style="background-color: #f1c40f; color: #333; margin-bottom: 15px;" onclick="playLineAudio()">🔊 Listen to Line</button>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+                    <button class="nav-btn" onclick="changeLine(-1)">⬅️ Previous</button>
+                    <span id="line-counter-text">1 / 25</span>
+                    <button class="nav-btn" onclick="changeLine(1)">Next ➡️</button>
+                </div>
+                <button class="action-btn" onclick="startDictation()" style="background-color: #d35400;">Next: Listen & Write ✍️</button>
+            </div>
+            <div class="author-footer">Created by : Hisham Embaby</div>
+        </div>
+
+        <div id="listen-write-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">↩ Back to Menu</button>
+            <div style="clear: both;"></div>
+            <h1>Listen & Write</h1>
+            <div id="dict-content">
+                <button class="action-btn" style="background-color: #f1c40f; color: #333; margin-bottom: 20px;" onclick="playDictAudio()">🔊 Listen to Sentence</button>
+                <audio id="dict-audio"></audio>
+                <input type="text" id="dict-input" placeholder="Type here..." style="width: 100%; padding: 15px; border-radius: 10px; border: 2px solid #5b2c6f; font-size: 1.1rem; text-align: center; margin-bottom: 15px;">
+                <button class="action-btn" style="background-color: #8e44ad;" onclick="checkDictation()">✔️ Check Answer</button>
+                <p id="dict-feedback" style="font-weight: bold; margin-top: 15px;"></p>
+                <p id="dict-correct-ans" class="hidden" style="color: #e74c3c; font-weight: bold;"></p>
+                <button id="next-dict-btn" class="hidden action-btn" onclick="nextDictation()">Next Sentence ➡️</button>
+                <p id="dict-counter" class="counter-style"></p>
+            </div>
+            <div id="dict-final-score-container" class="hidden">
+                <h2 id="dict-score-text" style="font-size: 1.6rem; color: #34495e; margin-bottom: 20px; line-height: 1.6;"></h2>
+                <button class="action-btn" onclick="goToStage('character-select-stage')">Next: Roleplay 🎭</button>
+            </div>
+            <div class="author-footer">Created by : Hisham Embaby</div>
+        </div>
+
+        <div id="character-select-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">↩ Back to Menu</button>
+            <div style="clear: both;"></div>
+            <h1>Choose Your Role</h1>
+            <div style="display:flex; flex-wrap: wrap; gap:15px; justify-content:center; margin-top:20px;">
+                <button class="action-btn" onclick="startRoleplay('Jack')" style="width: 30%; background: #fff; color: #5b2c6f; border: 2px solid #5b2c6f; font-size: 1rem;">
+                    <img src="images/jack.jpg" style="width:50px; border-radius:50%;"><br>Jack
+                </button>
+                <button class="action-btn" onclick="startRoleplay('Alice')" style="width: 30%; background: #fff; color: #5b2c6f; border: 2px solid #5b2c6f; font-size: 1rem;">
+                    <img src="images/alice.jpg" style="width:50px; border-radius:50%;"><br>Alice
+                </button>
+                <button class="action-btn" onclick="startRoleplay('Sharon')" style="width: 30%; background: #fff; color: #5b2c6f; border: 2px solid #5b2c6f; font-size: 1rem;">
+                    <img src="images/sharon.jpg" style="width:50px; border-radius:50%;"><br>Sharon
+                </button>
+            </div>
+            <div class="author-footer">Created by : Hisham Embaby</div>
+        </div>
+
+        <div id="roleplay-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToStage('character-select-stage')">↩ Back to Roles</button>
+            <div style="clear: both;"></div>
+            <h1>Roleplay Mode</h1>
+            
+            <div id="rp-content-area">
+                <div class="dialogue-box">
+                    <p class="char-name" id="rpChar"></p>
+                    <p class="dial-text" id="rpText"></p>
+                </div>
+                <div id="rpIndicator" class="turn-indicator"></div>
+                <button id="btnRecord" class="action-btn" style="background:#8e44ad; display:none;" onclick="toggleRecording()">YOUR TURN 🎤</button>
+                <audio id="userAudio" controls style="display:none; width:100%; margin-bottom: 15px;"></audio>
+                <button class="action-btn" onclick="nextRp()" style="margin-top:10px;">Next Step ➡️</button>
+                <audio id="rpAudio"></audio>
+            </div>
+            
+            <div id="rp-result-area" class="hidden" style="background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); border: 1px solid #b0bec5;">
+                <h2 style="color: #0d47a1; font-size: 1.8rem; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Your Conversation</h2>
+                <button id="btnPlayAll" class="action-btn" style="background-color: #1976d2; margin-bottom: 20px; font-family: 'Poppins', sans-serif; border-radius: 12px;" onclick="playFullConversation()">▶️ Play Entire Dialogue</button>
+                
+                <div id="conversation-history" style="display: flex; flex-direction: column; gap: 10px; max-height: 350px; overflow-y: auto; padding-right: 10px; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
+                    </div>
+                
+                <audio id="fullPlaybackAudio"></audio>
+                <button class="action-btn" onclick="goToStage('grammar-stage')" style="background-color: #e67e22; font-family: 'Poppins', sans-serif; border-radius: 12px;">Next: Grammar Lesson 👨‍🏫</button>
+            </div>
+            
+            <div class="author-footer">Created by : Hisham Embaby</div>
+        </div>
+
+        <div id="grammar-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">↩ Back to Menu</button>
+            <div style="clear: both;"></div>
+            <h1>Grammar Lesson</h1>
+            <div class="video-container" style="position:relative; padding-top:56.25%; height:0; overflow:hidden; border-radius:15px; border:4px solid #fff;">
+                <iframe class="rumble" width="100%" height="100%" src="https://rumble.com/embed/v77ypag/?pub=4patlm&rel=0" frameborder="0" allowfullscreen style="position:absolute; top:0; left:0; border:0;"></iframe>
+            </div>
+            <button class="action-btn" onclick="startGrammarQuiz()" style="background-color: #e67e22; margin-top: 15px;">Next: Grammar Quiz 📝</button>
+            <div class="author-footer">Created by : Hisham Embaby</div>
+        </div>
+
+        <div id="grammar-quiz-stage" class="stage watermark-bg">
+            <button class="back-home-btn" onclick="goToHome()">↩ Back to Menu</button>
+            <div style="clear: both;"></div>
+            <h1 style="color: #5b2c6f;">Grammar Quiz</h1>
+            <div id="g-quiz-content">
+                <div style="background: #f8f9fa; border: 1px solid #bdc3c7; border-radius: 15px; padding: 40px 20px; margin-bottom: 25px;">
+                    <p id="g-question-text" style="font-size: 1.5rem; font-weight: bold; color: #5b2c6f; margin: 0;"></p>
+                </div>
+                <div id="g-options-container"></div>
+                <p id="g-feedback-text"></p>
+                <button id="g-next-question-btn" class="hidden action-btn" onclick="nextGrammarQuestion()">Next Question ➡️</button>
+                <p id="g-quiz-counter" class="counter-style"></p>
+            </div>
+            <div id="g-final-score-container" class="hidden">
+                <h2 id="g-score-text" style="font-size: 1.6rem; color: #34495e; margin-bottom: 20px; line-height: 1.6;"></h2>
+                <button class="action-btn" onclick="goToHome()">Finish Lesson 🏠</button>
+            </div>
+            <div class="author-footer">Created by : Hisham Embaby</div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
